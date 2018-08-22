@@ -14,9 +14,16 @@
 
 @import 'bootstrap';
 
+html {
+  height: 93.7%;
+}
+
 body {
-  //background: #0d1a23;
-  //background: #101b23;
-  //background: #13212b;
   background: #000;
+  height: 100%;
+}
+
+.fill-all {
+  height: 100%;
+  overflow: hidden;
 }

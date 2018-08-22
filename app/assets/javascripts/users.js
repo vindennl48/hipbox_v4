@@ -1,7 +1,6 @@
 JS.Users = {
 
   Login: {
-
     onLoad: function(){
       let buttons = document.querySelectorAll("[type='button']")
       for(var i=0; i<buttons.length; i++){
@@ -11,7 +10,20 @@ JS.Users = {
         }
       }
     }
+  },
 
+  Interface: {
+    paper: "raphael object",
+
+    onLoad: function(){
+      let paper = JS.Users.Interface.paper
+      let width = document.getElementById("wrap_gui").clientWidth
+      let height = window.innerHeight
+      console.log(width)
+      console.log(height)
+      paper = Raphael(document.getElementById('wrap'), width, height)
+        .setViewBox(0, 0, width, height, true)
+    }
   }
 
 }
