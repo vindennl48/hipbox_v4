@@ -23,6 +23,7 @@ JS.Users = {
       console.log(height)
       paper = Raphael(document.getElementById('wrap'), width, height)
         .setViewBox(0, 0, width, height, true)
+      GUI.slider_vertical(paper, '#ffa500')
     }
   }
 
