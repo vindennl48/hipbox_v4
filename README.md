@@ -1,24 +1,14 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This is using docker-compose.  Build the web image first and deploy.
 
-Things you may want to cover:
+```sh
+ $ docker-compose build web
+ $ docker-compose up
+```
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+As of right now, you will need to input these users into the database by going to `localhost:3000/users/sign_up`.
+ - email: 'mitch@lof.com', password: 'password'
+ - email: 'james@lof.com', password: 'password'
+ - email: 'jesse@lof.com', password: 'password'
+ - email: 'drums@lof.com', password: 'password'
