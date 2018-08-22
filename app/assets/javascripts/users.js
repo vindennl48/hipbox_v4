@@ -19,11 +19,12 @@ JS.Users = {
       let paper = JS.Users.Interface.paper
       let width = document.getElementById("wrap_gui").clientWidth
       let height = window.innerHeight
-      console.log(width)
-      console.log(height)
       paper = Raphael(document.getElementById('wrap'), width, height)
         .setViewBox(0, 0, width, height, true)
-      GUI.slider_vertical(paper, '#ffa500')
+      GUI.slider_vertical.create(paper, 15, 15, 60, 300, "orange")
+      GUI.slider_vertical.create(paper, (75*1)+15, 15, 60, 300, "green")
+      GUI.slider_vertical.create(paper, (75*2)+15, 15, 60, 300, "yellow")
+      GUI.slider_vertical.create(paper, (75*3)+15, 15, 60, 300, "blue")
     }
   }
 
