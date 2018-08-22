@@ -1,26 +1,59 @@
-<h2>Log in</h2>
+<div class=" container text-center ">
 
-<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
-  </div>
-
-  <div class="field">
-    <%= f.label :password %><br />
-    <%= f.password_field :password, autocomplete: "current-password" %>
-  </div>
-
-  <% if devise_mapping.rememberable? -%>
-    <div class="field">
-      <%= f.check_box :remember_me %>
-      <%= f.label :remember_me %>
+  <div class=" row ">
+    <div class=" col ">
+      <h1 class=" text-light ">HipBox v4.0</h1>
     </div>
-  <% end -%>
-
-  <div class="actions">
-    <%= f.submit "Log in" %>
   </div>
-<% end %>
 
-<%= render "devise/shared/links" %>
+  <div class=" row ">
+    <div class=" col ">
+      <div class=" row mt-2 ">
+        <div class=" col ">
+          <h3 class=" text-light ">Select User</h3>
+        </div>
+      </div>
+      <div class=" row mb-2 ">
+        <div class=" col ">
+          <button id="mitch@lof.com" type="button" 
+            class=" btn btn-outline-primary btn-block">Mitch</button>
+        </div>
+      </div>
+      <div class=" row mb-2 ">
+        <div class=" col ">
+          <button id="james@lof.com" type="button" 
+            class=" btn btn-outline-primary btn-block">James</button>
+        </div>
+      </div>
+      <div class=" row mb-2 ">
+        <div class=" col ">
+          <button id="jesse@lof.com" type="button" 
+            class=" btn btn-outline-primary btn-block">Jesse</button>
+        </div>
+      </div>
+      <div class=" row mb-2 ">
+        <div class=" col ">
+          <button id="drums@lof.com" type="button" 
+            class=" btn btn-outline-primary btn-block">Drums</button>
+        </div>
+      </div>
+      <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+        <div class="field" hidden>
+          <%= f.email_field :email, autofocus: true, autocomplete: "email", id: "email" %>
+          <%= f.password_field :password, autocomplete: "current-password", value: "password" %>
+        </div>
+
+        <div class=" row ">
+          <div class=" col ">
+            <div id="btn_submit" class="actions" hidden>
+              <%= f.submit "Log in", class: "btn btn-success" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+</div>
+
+<script> JS.Users.Login.onLoad() </script>
