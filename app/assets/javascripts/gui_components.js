@@ -13,7 +13,7 @@ let GUI = {
   },
 
   slider_vertical: {
-    init: function(paper, x, y, width=60, height=300, color){
+    init: function(paper, ID, x, y, width=60, height=300, color){
 
       // body
       this.body = paper.rect(x, y, width, height, 3)
@@ -32,6 +32,9 @@ let GUI = {
         .push(this.body)
         .push(this.filler)
         .push(this.handle)
+
+      this.note = ['note', 0, 0]
+      this.id = ID
 
       return this
     },
@@ -65,13 +68,21 @@ let GUI = {
       let setbb = this.set.getBBox()
       let setbtm = setbb.y + setbb.height
       let volume = ((setbb.height - (y - setbb.y)) * 127) / setbb.height
+      if(volume > 127){ volume = 127 }
+      else if(volume < 0){ volume = 0 }
       this.set_volume(volume)
+      App.interface.update({note: this.note, value: volume})
       return this
     },
 
-    create: function(paper, x, y, width, height, color){
+    set_note: function(ntype, channel, n){
+      this.note = [ntype, channel, n]
+      return this
+    },
+
+    create: function(paper, ID, x, y, width, height, color){
       let a = Object.create(GUI.slider_vertical)
-        .init(paper, x, y, width, height, color)
+        .init(paper, ID, x, y, width, height, color)
         .set_volume(0)
         //.touch_volume(300)
         .drag(
@@ -82,7 +93,6 @@ let GUI = {
           function(){},
           function(){}
         )
-
       return a
     }
 
