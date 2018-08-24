@@ -7,7 +7,12 @@ class InterfaceChannel < ApplicationCable::Channel
   end
 
   def update(data)
-    ActionCable.server.broadcast "interface_channel_#{current_user.id}", data
+    data = data['data']
+    msg  = "/#{data['note']['member']}" 
+    msg += "/#{data['note']['ntype']}" 
+    msg += "/#{data['note']['note']}" 
+    #ActionCable.server.broadcast "interface_channel_#{current_user.id}", msg
+    $OSCRUBY.send OSC::Message.new(msg, data['value'])
   end
 
   def sync

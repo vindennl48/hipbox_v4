@@ -9,7 +9,7 @@ App.interface = App.cable.subscriptions.create "InterfaceChannel",
 
   received: (msg) ->
     # Called when there's incoming data on the websocket for this channel
-    console.log(msg.data.note)
+    console.log(msg)
     return 0
 
   update: (msg) ->

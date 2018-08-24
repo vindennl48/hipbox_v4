@@ -75,8 +75,12 @@ let GUI = {
       return this
     },
 
-    set_note: function(ntype, channel, n){
-      this.note = [ntype, channel, n]
+    set_note: function(member, ntype, note){
+      this.note = {
+        member: member,
+        ntype: ntype,
+        note: note
+      }
       return this
     },
 
