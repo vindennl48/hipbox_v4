@@ -16,19 +16,50 @@ JS.Users = {
     paper: "raphael object",
 
     onLoad: function(){
-      let paper = JS.Users.Interface.paper
       let width = document.getElementById("wrap_gui").clientWidth
       let height = window.innerHeight
-      paper = Raphael(document.getElementById('wrap'), width, height)
+      JS.Users.Interface.paper = Raphael(
+        document.getElementById('wrap'), width, height)
         .setViewBox(0, 0, width, height, true)
-      GUI.slider_vertical.create(paper, 1, 15, 15, 60, 300, "orange")
-        .set_note('mitch', 'cc', 0)
-      GUI.slider_vertical.create(paper, 2, (75*1)+15, 15, 60, 300, "green")
-        .set_note('mitch', 'cc', 1)
-      GUI.slider_vertical.create(paper, 3, (75*2)+15, 15, 60, 300, "yellow")
-        .set_note('mitch', 'cc', 2)
-      GUI.slider_vertical.create(paper, 4, (75*3)+15, 15, 60, 300, "blue")
-        .set_note('mitch', 'cc', 3)
+    },
+
+    loadGui: function(gui, variables){
+      for(var i=0; i<gui.length; i++){
+        let g = gui[i]
+        if (g['type'] == "slider_vertical"){
+          GUI.slider_vertical.create(
+            JS.Users.Interface.paper,
+            g['id'], g['x'], g['y'],
+            g['width'], g['height'], g['color']
+          ).set_variable(g['variable'])
+        }
+      }
+    }
+  },
+
+  Edit: {
+    paper: "raphael object",
+
+    onLoad: function(){
+      let width = document.getElementById("wrap_gui").clientWidth
+      let height = window.innerHeight
+      JS.Users.Edit.paper = Raphael(
+        document.getElementById('wrap'), width, height)
+        .setViewBox(0, 0, width, height, true)
+    },
+
+    loadGui: function(gui){
+      for(var i=0; i<gui.length; i++){
+        let g = gui[i]
+        if (g['type'] == "slider_vertical"){
+          GUI.slider_vertical.create(
+            JS.Users.Edit.paper,
+            g['id'], g['x'], g['y'],
+            g['width'], g['height'], g['color'],
+            "edit"
+          ).set_variable(g['variable'])
+        }
+      }
     }
   }
 

@@ -37,7 +37,7 @@ class Layout < ApplicationRecord
           layout: Layout.where(user_id: user.id, name: name).first.id 
         )
       else
-        new_layout = Layout.create(user_id: user.id, name: name)
+        new_layout = Layout.create(user_id: user.id, name: name, gui: {objects: []})
         User.update(user.id, layout: new_layout.id)
       end
     end

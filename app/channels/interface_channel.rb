@@ -8,14 +8,22 @@ class InterfaceChannel < ApplicationCable::Channel
 
   def update(data)
     data = data['data']
-    msg  = "/#{data['note']['member']}" 
-    msg += "/#{data['note']['ntype']}" 
-    msg += "/#{data['note']['note']}" 
-    #ActionCable.server.broadcast "interface_channel_#{current_user.id}", msg
+    note = Note.where(variable: data['variable']).first
+    msg  = "/#{note.channel}" 
+    msg += "/#{note.ntype}" 
+    msg += "/#{note.note}" 
     $OSCRUBY.send OSC::Message.new(msg, data['value'])
   end
 
   def sync
-    ActionCable.server.broadcast "interface_channel_#{current_user.id}", "Syncing"
+    ActionCable.server.broadcast "interface_channel_#{current_user.id}", get_sync
   end
+
+  private
+    def get_sync
+      return {
+        gui: Layout.find(current_user.layout).gui['objects'],
+        values: []
+      }
+    end
 end
