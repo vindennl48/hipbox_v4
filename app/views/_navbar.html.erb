@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand" href="#"><strong><%= user_name %></strong>: <%= current_layout_name %></a>
+  <a class="navbar-brand" href="#"><strong><%= user_name %></strong>: <%= current_layout.name %></a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -13,7 +13,7 @@
         <a class="nav-link" href="#">Edit </a>
       </li>
       <li class="nav-item">
-        <%= link_to 'Remove ', users_remove_layout_path(name: current_layout_name),
+        <%= link_to 'Remove ', current_layout, method: :delete,
           data: { confirm: "Are you sure you want to permanently remove this layout?" },
           class: 'nav-link' %>
       </li>
@@ -23,7 +23,7 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <% for layout in layouts %>
-            <%= link_to layout.name, users_change_layout_path(name: layout.name), class: 'dropdown-item' %>
+            <%= link_to layout.name, layouts_change_path(id: layout.id), class: 'dropdown-item' %>
           <% end %>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="javascript:void()" data-toggle="modal", data-target="#newLayoutModal">New </a>
@@ -47,7 +47,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <%= form_tag users_new_layout_path, method: 'get' do %>
+      <%= form_tag new_layout_path, method: 'get' do %>
         <div class="modal-body">
           <%= text_field_tag :name, '', placeholder: 'default',  class: 'form-control' %>
         </div>

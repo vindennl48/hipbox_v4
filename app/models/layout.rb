@@ -43,22 +43,4 @@ class Layout < ApplicationRecord
     end
   end
 
-  def self.change_layout(user, name)
-    if name != nil and name != ''
-      if Layout.exists? user_id: user.id, name: name
-        User.update(
-          user.id,
-          layout: Layout.where(user_id: user.id, name: name).first.id 
-        )
-      end
-    end
-  end
-
-  def self.remove_layout(user, name)
-    if Layout.exists? user_id: user.id, name: name
-      Layout.where(user_id: user.id, name: name).first.destroy
-    end
-    self.get_current_layout(user)
-  end
-
 end
