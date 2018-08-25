@@ -1,4 +1,7 @@
-<%= render './navbar', user: @user, layout_name: @layout_name %>
+<%= render './navbar',
+  user_name: @user_name,
+  current_layout_name: @layout.name,
+  layouts: @layouts %>
 
 <div class=" container text-center fill-all " >
   <div id="wrap_gui" class=" row fill-all " >
