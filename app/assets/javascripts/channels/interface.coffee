@@ -11,7 +11,10 @@ App.interface = App.cable.subscriptions.create "InterfaceChannel",
 
   received: (msg) ->
     # Called when there's incoming data on the websocket for this channel
-    JS.Users.Interface.loadGui(msg['gui'])
+    if JS.Layouts.Loaded
+      JS.Layouts.loadVars([])
+    else
+      JS.Layouts.loadGui(msg['gui'], [])
     return 0
 
   update: (msg) ->

@@ -7,10 +7,10 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
-        <a class="nav-link" href="#">Save </a>
+        <a class="nav-link" href="#">Save Values </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Edit </a>
+        <%= link_to 'Edit', edit_layout_path(current_layout), class: 'nav-link' %>
       </li>
       <li class="nav-item">
         <%= link_to 'Remove ', current_layout, method: :delete,

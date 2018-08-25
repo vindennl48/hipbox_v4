@@ -105,10 +105,10 @@ let GUI = {
 
     edit_on: function(paper){
       GUI.width_ball = paper.circle(15, 15, 20)
-        .attr({fill:'black', 'stroke-width':3, stroke:'white'})
+        .attr({fill:'#000', 'stroke-width':3, stroke:'#fff'})
 
       GUI.height_ball = paper.circle(15, 15, 20)
-        .attr({fill:'black', 'stroke-width':3, stroke:'white'})
+        .attr({fill:'#000', 'stroke-width':3, stroke:'#fff'})
 
       setbb = this.set.getBBox()
 

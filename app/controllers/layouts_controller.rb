@@ -1,8 +1,22 @@
 class LayoutsController < ApplicationController
+  before_action :authenticate_user!
+
+  def show
+    @user = User.find(current_user.id)
+    @user_name = User.user_name(@user)
+    @layout = Layout.get_current_layout(@user)
+    @layouts = Layout.where(user_id: @user.id)
+  end
 
   def new
     Layout.create_new_layout(current_user, params[:name])
     redirect_back fallback_location: users_interface_path
+  end
+
+  def edit
+    @user = User.find(current_user.id)
+    @user_name = User.user_name(@user)
+    @layout = Layout.find(params[:id])
   end
 
   def change
