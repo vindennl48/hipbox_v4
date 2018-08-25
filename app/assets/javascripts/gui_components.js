@@ -44,7 +44,8 @@ let GUI = {
 
       this.variable = ""
       this.id = ID
-      this.volume = 0
+      this.value = 0
+      this.color = color
 
       return this
     },
@@ -59,7 +60,7 @@ let GUI = {
 
     set_height: function(height){
       this.body.attr('height', height)
-      this.set_volume(this.volume)
+      this.set_volume(this.value)
     },
 
     set_volume: function(volume=0){
@@ -82,7 +83,7 @@ let GUI = {
       fillerbb = this.filler.getBBox()
       this.filler.attr('height', setbtm - fillerbb.y)
 
-      this.volume = volume
+      this.value = volume
 
       return this
     },
@@ -94,7 +95,7 @@ let GUI = {
       if(volume > 127){ volume = 127 }
       else if(volume < 0){ volume = 0 }
       this.set_volume(volume)
-      App.interface.update({variable: this.variable, value: volume})
+      App.interface.change_value({variable: this.variable, value: volume})
       return this
     },
 

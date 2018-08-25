@@ -2,7 +2,7 @@ App.interface = App.cable.subscriptions.create "InterfaceChannel",
   connected: ->
     # Called when the subscription is ready for use on the server
     console.log("Interface Channel Connected")
-    App.interface.update()
+    App.interface.sync_gui()
     return 0
 
   disconnected: ->
@@ -17,8 +17,16 @@ App.interface = App.cable.subscriptions.create "InterfaceChannel",
       JS.Layouts.loadGui(msg['gui'], [])
     return 0
 
-  update: (msg) ->
-    if typeof msg isnt 'undefined'
-      @perform 'update', data: msg
-    else
-      @perform 'sync'
+  change_value: (msg) ->
+    # Called when a signal is being sent to Ableton
+    @perform 'change_value', data: msg
+
+  save_values: ->
+    @perform 'save_values', data: JS.Layouts.getValues()
+
+  save_layout: ->
+    @perform 'save_layout', data: JS.Layouts.getLayout()
+
+  sync_gui: ->
+    @perform 'sync_gui'
+

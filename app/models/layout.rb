@@ -43,4 +43,37 @@ class Layout < ApplicationRecord
     end
   end
 
+  def self.save_layout(user, data)
+    layout = Layout.find(user.layout)
+    gui = layout.gui
+    for d in data
+      gui['objects'].each_with_index do |comp, x|
+        if comp['id'] == d['id']
+          gui['objects'][x]['x'] = d['x']
+          gui['objects'][x]['y'] = d['y']
+          gui['objects'][x]['width'] = d['width']
+          gui['objects'][x]['height'] = d['height']
+          gui['objects'][x]['color'] = d['color']
+          gui['objects'][x]['variable'] = d['variable']
+          break
+        end
+      end
+    end
+    Layout.update(user.layout, gui: gui)
+  end
+
+  def self.save_values(user, data)
+    layout = Layout.find(user.layout)
+    gui = layout.gui
+    for d in data
+      gui['objects'].each_with_index do |comp, x|
+        if comp['id'] == d['id']
+          gui['objects'][x]['value'] = d['value']
+          break
+        end
+      end
+    end
+    Layout.update(user.layout, gui: gui)
+  end
+
 end

@@ -2,6 +2,39 @@ JS.Layouts = {
 
   Mode: "show",
   Loaded: false,
+  Components: [],
+
+  getValues: function(){
+    let result = []
+    let comp = JS.Layouts.Components
+    for(var i=0; i<comp.length; i++){
+      let c = comp[i]
+      result.push({
+        "id": c.id,
+        "value": c.value
+      })
+    }
+    return result
+  },
+
+  getLayout: function(){
+    let result = []
+    let comp = JS.Layouts.Components
+    for(var i=0; i<comp.length; i++){
+      let c = comp[i]
+      let bodybb = c.body.getBBox()
+      result.push({
+        "id": c.id,
+        "x": bodybb.x,
+        "y": bodybb.y,
+        "width": bodybb.width,
+        "height": bodybb.height,
+        "color": c.color,
+        "variable": c.variable
+      })
+    }
+    return result
+  },
 
   loadGui: function(gui, variables){
     if(JS.Layouts.Loaded){ return 0 }
@@ -31,18 +64,23 @@ JS.Layouts = {
       JS.Layouts.Show.paper = Raphael(
         document.getElementById('wrap'), width, height)
         .setViewBox(0, 0, width, height, true)
-      App.interface.update()
+      App.interface.sync_gui()
     },
 
     loadGui: function(gui, variables){
+      JS.Layouts.Components = []
       for(var i=0; i<gui.length; i++){
         let g = gui[i]
         if (g['type'] == "slider_vertical"){
-          GUI.slider_vertical.create(
-            JS.Layouts.Show.paper,
-            g['id'], g['x'], g['y'],
-            g['width'], g['height'], g['color']
-          ).set_variable(g['variable'])
+          JS.Layouts.Components.push(
+            GUI.slider_vertical.create(
+              JS.Layouts.Show.paper,
+              g['id'], g['x'], g['y'],
+              g['width'], g['height'], g['color']
+            )
+              .set_variable(g['variable'])
+              .set_volume(g['value'])
+          )
         }
       }
     }
@@ -59,19 +97,22 @@ JS.Layouts = {
       JS.Layouts.Edit.paper = Raphael(
         document.getElementById('wrap'), width, height)
         .setViewBox(0, 0, width, height, true)
-      App.interface.update()
+      App.interface.sync_gui()
     },
 
     loadGui: function(gui){
+      JS.Layouts.Components = []
       for(var i=0; i<gui.length; i++){
         let g = gui[i]
         if (g['type'] == "slider_vertical"){
-          GUI.slider_vertical.create(
-            JS.Layouts.Edit.paper,
-            g['id'], g['x'], g['y'],
-            g['width'], g['height'], g['color'],
-            "edit"
-          ).set_variable(g['variable'])
+          JS.Layouts.Components.push(
+            GUI.slider_vertical.create(
+              JS.Layouts.Edit.paper,
+              g['id'], g['x'], g['y'],
+              g['width'], g['height'], g['color'],
+              "edit"
+            ).set_variable(g['variable'])
+          )
         }
       }
     }

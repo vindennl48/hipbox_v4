@@ -6,8 +6,8 @@ class InterfaceChannel < ApplicationCable::Channel
   def unsubscribed
   end
 
-  def update(data)
-    data = data['data']
+  def change_value(msg)
+    data = msg['data']
     note = Note.where(variable: data['variable']).first
     msg  = "/#{note.channel}" 
     msg += "/#{note.ntype}" 
@@ -15,7 +15,17 @@ class InterfaceChannel < ApplicationCable::Channel
     $OSCRUBY.send OSC::Message.new(msg, data['value'])
   end
 
-  def sync
+  def save_values(msg)
+    data = msg['data']
+    Layout.save_values(current_user, data)
+  end
+
+  def save_layout(msg)
+    data = msg['data']
+    Layout.save_layout(current_user, data)
+  end
+
+  def sync_gui
     ActionCable.server.broadcast "interface_channel_#{current_user.id}", get_sync
   end
 
