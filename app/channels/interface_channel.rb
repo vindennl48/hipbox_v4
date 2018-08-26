@@ -25,8 +25,10 @@ class InterfaceChannel < ApplicationCable::Channel
     Layout.save_layout(current_user, data)
   end
 
-  def load_gui
-    ActionCable.server.broadcast "interface_channel_#{current_user.id}", get_gui
+  def load_gui(msg)
+    edit = msg['edit']
+    ActionCable.server.broadcast "interface_channel_#{current_user.id}",
+      {type: 'gui', data: get_gui, edit: edit}
   end
 
   private

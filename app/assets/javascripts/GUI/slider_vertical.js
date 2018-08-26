@@ -1,46 +1,145 @@
-GUI.slider_vertical = {
-  init: function(paper, ID, x, y, width=60, height=300, color, extra){
+GUI.add_component({
+  ctype: 'slider_vertical',              // primary key in component table
+  name:  'Slider Vertical',              // display name
 
-    // body
+  init: function(paper, record){
+    // Component Variables
+    this.paper     = paper               // raphaeljs paper
+    this.id        = record['id']        // primary key in component table
+    this.color     = record['color']     // base color value
+    this.extra     = record['extra']     // anything extra needed
+    this.variable  = record['variable']  // midi note variable
+    this.value     = record['value']     // saved value
+    this.layout_id = record['layout_id'] // saved value
+    // --
+
+    // RaphaelJS Items
+    // temporary defaults
+    let x = 0, y = 0, width = 60, height = 300
+
     this.body = paper.rect(x, y, width, height, 3)
-      .attr({fill:'black', 'stroke-width':3, stroke:color})
+      .attr({fill:'black', 'stroke-width':3, stroke:this.color})
 
-    // volume filler
     this.filler = paper.rect(x, y+5, width, height-5, 3)
-      .attr({fill:'#424242', 'stroke-width':3, stroke:color})
+      .attr({fill:'#424242', 'stroke-width':3, stroke:this.color})
 
-    // handle
     this.handle = paper.rect(x, y, width, 10, 3)
-      .attr({fill:color, 'stroke-width':0, stroke:color})
+      .attr({fill:this.color, 'stroke-width':0, stroke:this.color})
+    // --
 
-    // container to hold all the pieces
+    // Container to hold all the pieces
     this.set = paper.set()
       .push(this.body)
       .push(this.filler)
       .push(this.handle)
+    // --
 
-    this.variable = ""
-    this.id = ID
-    this.value = 0
-    this.color = color
-    this.extra = extra
+    // Move into position and resize
+    this.x(record['x'])
+    this.y(record['y'])
+    this.width(record['width'])
+    this.height(record['height'])
+    // --
 
     return this
   },
 
-  drag: function(a, b, c){ this.set.drag(a, b, c); return this },
+  // Size & Position
+  x: function(x){ 
+    if(x == undefined){ return this.body.getBBox().x }
+    else{ GUI.move_to(this.set, x); return this }
+  },
+  y: function(y){ 
+    if(y == undefined){ return this.body.getBBox().y }
+    else{ GUI.move_to(this.set, this.x(), y); return this }
+  },
+  width: function(width){
+    if(width == undefined){
+      return this.body.getBBox().width 
+    }
+    else{ 
+      this.body.attr('width', width)
+      this.filler.attr('width', width)
+      this.handle.attr('width', width)
+      return this 
+    }
+  },
+  height: function(height){
+    if(height == undefined){
+      return this.body.getBBox().height 
+    }
+    else{ 
+      this.body.attr('height', height)
+      this.set_volume(this.value)
+      return this
+    }
+  },
+  drag: function(a, b, c){
+    this.set.drag(a, b, c)
+    return this
+  },
+  // --
 
-  set_width: function(width){
-    this.body.attr('width', width)
-    this.filler.attr('width', width)
-    this.handle.attr('width', width)
+  // Layout saving, changing, etc.
+  edit_on: function(){
+    width_ball = GUI.add_to_charm_list(
+      'width_ball',
+      this.paper.circle(15, 15, 20)
+        .attr({fill:'#000', 'stroke-width':3, stroke:'#fff'})
+    )
+
+    height_ball = GUI.add_to_charm_list(
+      'height_ball',
+      this.paper.circle(15, 15, 20)
+        .attr({fill:'#000', 'stroke-width':3, stroke:'#fff'})
+    )
+
+    setbb = this.set.getBBox()
+
+    GUI.move_to(
+      width_ball, 
+      setbb.x + setbb.width - 20,
+      setbb.y + setbb.height/2 - 20
+    )
+    GUI.move_to(
+      height_ball, 
+      setbb.x + setbb.width/2 - 20,
+      setbb.y + setbb.height - 20
+    )
   },
 
-  set_height: function(height){
-    this.body.attr('height', height)
-    this.set_volume(this.value)
+  edit_off: function(){ GUI.clear_charms() },
+
+  get_layout_info: function(){
+    return {
+      "id":        this.id,
+      "ctype":     this.ctype,
+      "x":         this.x(),
+      "y":         this.y(),
+      "width":     this.width(),
+      "height":    this.height(),
+      "color":     this.color,
+      "extra":     this.extra,
+      "layout_id": this.layout_id,
+      "variable":  this.variable,
+      "value":     this.value
+    }
   },
 
+  get_value_info: function(){
+    return {
+      "id":    this.id,
+      "value": this.value
+    }
+  },
+
+  remove: function(){
+    this.body.remove()
+    this.filler.remove()
+    this.handle.remove()
+  },
+
+  // Component Specific
   set_volume: function(volume=0){
     if(volume > 127){ volume = 127 }
     else if(volume < 0){ volume = 0 }
@@ -73,130 +172,76 @@ GUI.slider_vertical = {
     if(volume > 127){ volume = 127 }
     else if(volume < 0){ volume = 0 }
     this.set_volume(volume)
-    App.interface.change_value({variable: this.variable, value: volume})
+    GUI.change_value({variable: this.variable, value: volume})
     return this
   },
+  // --
 
-  set_variable: function(variable){
-    this.variable = variable
-    return this
-  },
-
-  edit_on: function(paper){
-    GUI.width_ball = paper.circle(15, 15, 20)
-      .attr({fill:'#000', 'stroke-width':3, stroke:'#fff'})
-
-    GUI.height_ball = paper.circle(15, 15, 20)
-      .attr({fill:'#000', 'stroke-width':3, stroke:'#fff'})
-
-    setbb = this.set.getBBox()
-
-    GUI.move_to(
-      GUI.width_ball, 
-      setbb.x + setbb.width - 20,
-      setbb.y + setbb.height/2
-    )
-    GUI.move_to(
-      GUI.height_ball, 
-      setbb.x + setbb.width/2 - 20,
-      setbb.y + setbb.height - 20
-    )
-  },
-
-  edit_off: function(){
-    GUI.remove_balls()
-  },
-
-  get_layout_info: function(){
-    let bodybb = this.body.getBBox()
-    return {
-      "id": this.id,
-      "ctype": "slider_vertical",
-      "x": bodybb.x,
-      "y": bodybb.y,
-      "width": bodybb.width,
-      "height": bodybb.height,
-      "color": this.color,
-      "variable": this.variable,
-      "value": this.value,
-      "extra": this.extra
-    }
-  },
-
-  get_value_info: function(){
-    return {
-      "id": this.id,
-      "value": this.value
-    }
-  },
-
-  create: function(paper, ID, x, y, width, height, color, extra, variable="", value=0, edit="no"){
+  create: function(paper, record, edit="no"){
     let a = Object.create(GUI.slider_vertical)
-      .init(paper, ID, x, y, width, height, color, extra)
+      .init(paper, record)
+
     if(edit == "no"){
-      a.set_volume(value)
-        .set_variable(variable)
-        .drag(
-          function(dx, dy, x, y){
-            let offset = $('#wrap').offset().top
-            a.touch_volume(y - offset)
-          },
-          function(){},
-          function(){}
-        )
+      a.drag(
+        function(dx, dy, x, y){
+          let offset = $('#wrap').offset().top
+          a.touch_volume(y - offset)
+        },
+        function(){},
+        function(){}
+      )
     }
+
     else {
-      a.set_volume(100)
-        .set_variable(variable)
-        .drag(
-          function(dx, dy){
-            if (!a.spos){a.spos = {x:0, y:0}}
-            GUI.move_by(a.set, dx-a.spos.x, dy-a.spos.y)
-            a.spos = {x:dx, y:dy}
-          },
-          function(){ a.edit_off() },
-          function(){ 
-            a.spos = undefined
-            a.edit_on(paper)
+      a.drag(
+        function(dx, dy){
+          if (!a.spos){a.spos = {x:0, y:0}}
+          GUI.move_by(a.set, dx-a.spos.x, dy-a.spos.y)
+          a.spos = {x:dx, y:dy}
+        },
+        function(){ a.edit_off() },
+        function(){ 
+          a.spos = undefined
+          a.edit_on(paper)
 
-            GUI.width_ball.drag(
-              function(dx, dy){
-                let setbb = a.set.getBBox()
-                if (!GUI.width_ball.spos){GUI.width_ball.spos = 0}
-                GUI.move_by(GUI.width_ball, dx-GUI.width_ball.spos, 0)
-                a.set_width(setbb.width + dx-GUI.width_ball.spos)
-                GUI.move_to(
-                  GUI.height_ball, 
-                  setbb.x + setbb.width/2 - 20,
-                  setbb.y + setbb.height - 20
-                )
-                GUI.width_ball.spos = dx
-              },
-              function(){},
-              function(){ GUI.width_ball.spos = undefined }
-            )
+          GUI.charms.width_ball.drag(
+            function(dx, dy){
+              let setbb = a.set.getBBox()
+              if (!GUI.charms.width_ball.spos){GUI.charms.width_ball.spos = 0}
+              GUI.move_by(GUI.charms.width_ball, dx-GUI.charms.width_ball.spos, 0)
+              a.width(setbb.width + dx-GUI.charms.width_ball.spos)
+              GUI.move_to(
+                GUI.charms.height_ball, 
+                setbb.x + setbb.width/2 - 20,
+                setbb.y + setbb.height - 20
+              )
+              GUI.charms.width_ball.spos = dx
+            },
+            function(){},
+            function(){ GUI.charms.width_ball.spos = undefined }
+          )
 
-            GUI.height_ball.drag(
-              function(dx, dy){
-                let setbb = a.set.getBBox()
-                if (!GUI.height_ball.spos){GUI.height_ball.spos = 0}
-                GUI.move_by(GUI.height_ball, 0, dy-GUI.height_ball.spos)
-                a.set_height(setbb.height + dy-GUI.height_ball.spos)
-                GUI.move_to(
-                  GUI.width_ball, 
-                  setbb.x + setbb.width - 20,
-                  setbb.y + setbb.height/2
-                )
-                GUI.height_ball.spos = dy
-              },
-              function(){},
-              function(){ GUI.height_ball.spos = undefined }
-            )
+          GUI.charms.height_ball.drag(
+            function(dx, dy){
+              let setbb = a.set.getBBox()
+              if (!GUI.charms.height_ball.spos){GUI.charms.height_ball.spos = 0}
+              GUI.move_by(GUI.charms.height_ball, 0, dy-GUI.charms.height_ball.spos)
+              a.height(setbb.height + dy-GUI.charms.height_ball.spos)
+              GUI.move_to(
+                GUI.charms.width_ball, 
+                setbb.x + setbb.width - 20,
+                setbb.y + setbb.height/2 -20
+              )
+              GUI.charms.height_ball.spos = dy
+            },
+            function(){},
+            function(){ GUI.charms.height_ball.spos = undefined }
+          )
 
-          }
-        )
+        }
+      )
     }
     return a
   }
 
-}
+})

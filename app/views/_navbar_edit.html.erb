@@ -20,9 +20,13 @@
         <a class="nav-link" href="#">Layout Properties </a>
       </li>
       <li class="nav-item">
-        <%= link_to 'Save Layout', current_layout,
-          onclick: "App.interface.save_layout()",
-          class: 'nav-link' %>
+        <%= link_to 'Save Layout', current_layout, onclick: "GUI.save_layout()", class: 'nav-link' %>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link">-------------------</a>
+      </li>
+      <li class="nav-item">
+        <%= link_to 'Cancel', current_layout, class: 'nav-link' %>
       </li>
     </ul>
   </div>

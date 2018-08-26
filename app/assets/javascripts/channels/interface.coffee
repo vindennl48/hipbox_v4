@@ -2,7 +2,7 @@ App.interface = App.cable.subscriptions.create "InterfaceChannel",
   connected: ->
     # Called when the subscription is ready for use on the server
     console.log("Interface Channel Connected")
-    App.interface.load_gui()
+    App.interface.initialized = true
     return 0
 
   disconnected: ->
@@ -11,20 +11,20 @@ App.interface = App.cable.subscriptions.create "InterfaceChannel",
 
   received: (msg) ->
     # Called when there's incoming data on the websocket for this channel
-    if not JS.Layouts.Loaded
-      JS.Layouts.loadGui(msg)
+    if msg.type is 'gui'         then GUI.load(msg.data, msg.edit)
+    else if msg.type is 'values' then GUI.set_values(msg.data)
     return 0
 
-  change_value: (msg) ->
+  change_value: (value) ->
     # Called when a signal is being sent to Ableton
-    @perform 'change_value', data: msg
+    @perform 'change_value', data: value
 
-  save_values: ->
-    @perform 'save_values', data: JS.Layouts.getValues()
+  save_values: (values) ->
+    @perform 'save_values', data: values
 
-  save_layout: ->
-    @perform 'save_layout', data: JS.Layouts.getLayout()
+  save_layout: (layout) ->
+    @perform 'save_layout', data: layout
 
-  load_gui: ->
-    @perform 'load_gui'
+  load_gui: (edit) ->
+    @perform 'load_gui', edit: edit
 
