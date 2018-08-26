@@ -10,14 +10,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_24_210325) do
+ActiveRecord::Schema.define(version: 2018_08_26_015739) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "components", force: :cascade do |t|
+    t.string "ctype"
+    t.decimal "x"
+    t.decimal "y"
+    t.decimal "width"
+    t.decimal "height"
+    t.string "color"
+    t.json "extra"
+    t.bigint "layout_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "variable"
+    t.decimal "value"
+    t.index ["layout_id"], name: "index_components_on_layout_id"
+  end
+
   create_table "layouts", force: :cascade do |t|
     t.bigint "user_id"
-    t.json "gui"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "name"
@@ -37,5 +52,6 @@ ActiveRecord::Schema.define(version: 2018_08_24_210325) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "components", "layouts"
   add_foreign_key "layouts", "users"
 end

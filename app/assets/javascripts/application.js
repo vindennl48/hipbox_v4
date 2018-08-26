@@ -17,5 +17,9 @@
 //= require popper
 //= require bootstrap
 //= require JS_namespace
+//= require GUI/GUI_namespace
+//= require layouts/layouts
+//= require layouts/edit
+//= require layouts/show
 //= require_tree .
 

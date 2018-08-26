@@ -25,15 +25,13 @@ class InterfaceChannel < ApplicationCable::Channel
     Layout.save_layout(current_user, data)
   end
 
-  def sync_gui
-    ActionCable.server.broadcast "interface_channel_#{current_user.id}", get_sync
+  def load_gui
+    ActionCable.server.broadcast "interface_channel_#{current_user.id}", get_gui
   end
 
   private
-    def get_sync
-      return {
-        gui: Layout.find(current_user.layout).gui['objects'],
-        values: []
-      }
+    def get_gui
+      layout_id = Layout.find(current_user.layout).id
+      return Component.where(layout_id: layout_id)
     end
 end
