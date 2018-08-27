@@ -8,22 +8,22 @@
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
         <a class="nav-link" href="javascript:void()"
-          data-toggle="modal", data-target="#addItemModal">Add Item </a>
+          data-toggle="modal", data-target="#addItemModal">+Add Item </a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="#">Item Properties </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link">-------------------</a>
+        <a class="nav-link" href="#">Layout Properties </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Layout Properties </a>
+        <%= link_to 'Edit Variables', notes_path, class: 'nav-link' %>
       </li>
       <li class="nav-item">
         <%= link_to 'Save Layout', current_layout, onclick: "GUI.save_layout()", class: 'nav-link' %>
       </li>
-      <li class="nav-item">
-        <a class="nav-link">-------------------</a>
+      <li class="nav-divider">
+        <a>-------------------</a>
       </li>
       <li class="nav-item">
         <%= link_to 'Cancel', current_layout, class: 'nav-link' %>

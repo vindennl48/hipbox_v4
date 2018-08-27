@@ -28,3 +28,11 @@ body {
   overflow: hidden;
   touch-action: none;
 }
+
+.nav-divider {
+  @extend .text-muted;
+  @extend .nav-item;
+  @extend .d-block;
+  @extend .d-lg-none;
+}
+

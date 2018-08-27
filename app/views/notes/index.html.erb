@@ -1,0 +1,17 @@
+<%= stylesheet_link_tag    params["controller"], media: 'screen' %>
+
+<%= render 'navbar_index' %>
+
+<div class=" container text-center ">
+
+  <div class=" row ">
+    <div class=" col ">
+      <button type="button" class=" btn btn-sm btn-primary btn-block ">+Add</button>
+    </div>
+  </div>
+
+  <% 20.times do |x| %>
+    <%= render 'row' %>
+  <% end %>
+
+</div>
