@@ -106,7 +106,7 @@ let GUI = {
       comp.color = $("#text_field_color").val()
       comp.reload(GUI.paper, comp.get_layout_info()).edit_on()
     }
-    $("#btn_save_item_prop").click(btn_save)
+    $("#btn_save_item_prop").unbind('click').click(btn_save)
   },
 
   // --
