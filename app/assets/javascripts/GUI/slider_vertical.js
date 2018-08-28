@@ -223,13 +223,13 @@ GUI.add_component({
     else {
       a.drag(
         function(dx, dy){
-          if (!a.spos){a.spos = {x:0, y:0}}
-          GUI.move_by(a.set, dx-a.spos.x, dy-a.spos.y)
-          a.spos = {x:dx, y:dy}
+          if (!a.spos){a.spos = {x:a.x(), y:a.y()}}
+          GUI.move_to(a.set, GUI.snap(dx+a.spos.x), GUI.snap(dy+a.spos.y))
         },
         function(){ a.edit_off() },
         function(){ 
           a.spos = undefined
+          //a.sposm = undefined
           a.edit_on(paper)
 
           GUI.charms.width_ball.drag(

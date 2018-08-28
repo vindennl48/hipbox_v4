@@ -122,6 +122,14 @@ let GUI = {
     return a
   },
 
+  snap: function(x){
+    //return x%5<3 ? (x%5===0 ? x : Math.floor(x/5)*5) : Math.ceil(x/5)*5
+    if(x < 0)
+      return -(Math.floor(Math.abs(x)/5)*5)
+    else
+      return Math.floor(x/5)*5
+  },
+
   // --
 
   // Resizing
