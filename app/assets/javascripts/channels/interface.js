@@ -10,7 +10,6 @@ App.interface = App.cable.subscriptions.create("InterfaceChannel", {
   },
 
   received: function(msg) {
-    console.log(msg)
     // Called when there's incoming data on the websocket for this channel
     if      (msg.type == 'gui')    { GUI.load(msg.data, msg.edit) }
     else if (msg.type == 'values') { GUI.set_values(msg.data) }

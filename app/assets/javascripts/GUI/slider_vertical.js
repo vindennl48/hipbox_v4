@@ -162,6 +162,7 @@ GUI.add_component({
     volume = parseInt(volume)
     if(volume > 127){ volume = 127 }
     else if(volume < 0){ volume = 0 }
+
     let v_percent = 1 - (volume / 127.0)
 
     let setbb = this.body.getBBox()

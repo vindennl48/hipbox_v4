@@ -11,14 +11,8 @@ App.variables = App.cable.subscriptions.create("VariablesChannel", {
 
   received: function(data) {
     // Called when there's incoming data on the websocket for this channel
-    if(!App.variables.sending){
-      if(data.user_id != JS.user_id){
-        for(var i=0; i<GUI.components.length; i++){
-          if(GUI.components[i].variable == data.note.variable)
-            GUI.components[i].set_value(data.note.value, update="no")
-        }
-      }
-    }
+    if(!App.variables.sending)
+      GUI.set_values(data)
   },
 
   change_value: function(data) {

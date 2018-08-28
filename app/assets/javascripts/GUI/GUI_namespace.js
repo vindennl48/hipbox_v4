@@ -47,7 +47,26 @@ let GUI = {
   },
 
   // This sets the variables to new values
-  set_values: function(data){},
+  set_values: function(data){
+    if(data.user_id == 0){
+      setTimeout(function(){
+        for(var i=0; i<data.note.length; i++){
+          for(var j=0; j<GUI.components.length; j++){
+            if(GUI.components[j].variable == data.note[i].variable)
+              GUI.components[j].set_value(data.note[i].value, update="no")
+          }
+        }
+      }, 500)
+    }
+    else if(data.user_id != JS.user_id){
+      setTimeout(function(){
+        for(var i=0; i<GUI.components.length; i++){
+          if(GUI.components[i].variable == data.note.variable)
+            GUI.components[i].set_value(data.note.value, update="no")
+        }
+      }, 10)
+    }
+  },
 
   // Change Value on server
   change_value: function(data){ App.variables.change_value(data) },

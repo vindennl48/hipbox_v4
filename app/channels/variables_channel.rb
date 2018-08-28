@@ -20,7 +20,8 @@ class VariablesChannel < ApplicationCable::Channel
   end
 
   def update_variables
-    UpdateVariablesJob.perform_later
+      ActionCable.server.broadcast "variables_channel",
+        {user_id: 0, note: Note.all}
   end
 
 end
