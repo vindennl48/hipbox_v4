@@ -30,6 +30,7 @@ JS.Layouts = {
   Edit: {
     onLoad: function(layout_id){
       JS.Layouts.onLoad(layout_id, edit="yes")
+
       for(var i=0; i<GUI.component_list.length; i++){
         let c = GUI.component_list[i]
         console.log(c)
@@ -41,6 +42,7 @@ JS.Layouts = {
             onclick="GUI.add('`+c['ctype']+`', `+layout_id+`)">`+c['name']+`</a>
         `)
       }
+
     }
   }
 

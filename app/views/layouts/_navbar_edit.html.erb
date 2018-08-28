@@ -14,7 +14,7 @@
         <div id="dropdown_component_list" class="dropdown-menu"></div>
       </li>
 
-      <li class="nav-item">
+      <li id="link_item_prop" class="nav-item" hidden>
         <a class="nav-link" href="#" data-toggle="modal" data-target="#itemPropertiesModal">Item Properties </a>
       </li>
       <li class="nav-item">
@@ -55,7 +55,7 @@
                 <div class=" input-group-prepend ">
                   <span class=" input-group-text " style=" width: 88px; ">Variable: </span>
                 </div>
-                <%= text_field_tag :variable, '', placeholder: 'variable', class: 'form-control text-center' %>
+                <%= text_field_tag :variable, '', placeholder: 'variable', id: 'text_field_variable', class: 'form-control text-center' %>
               </div>
             </div>
           </div>
@@ -65,7 +65,7 @@
                 <div class=" input-group-prepend ">
                   <span class=" input-group-text " style=" width: 88px; ">Color: </span>
                 </div>
-                <%= text_field_tag :color, '', placeholder: 'color', class: 'form-control text-center' %>
+                <%= text_field_tag :color, '', placeholder: 'color', id: 'text_field_color', class: 'form-control text-center' %>
               </div>
             </div>
           </div>
@@ -73,9 +73,9 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal"
             data-toggle="collapse" data-target="#navbarSupportedContent" >Cancel</button>
-          <%#<button type="button" class="btn btn-primary" data-dismiss="modal"%>
-            <%#data-toggle="collapse" data-target="#navbarSupportedContent" >Save</button>%>
-          <%= submit_tag :Save, class: 'btn btn-primary' %>
+          <button id="btn_save_item_prop" type="button" class="btn btn-primary" data-dismiss="modal"
+            data-toggle="collapse" data-target="#navbarSupportedContent" >Save</button>
+          <%#= link_to :Save, edit_layout_path(current_layout), id: 'btn_save_item_prop', class: 'btn btn-primary' %>
         </div>
       <% end %>
     </div>

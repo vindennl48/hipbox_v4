@@ -95,6 +95,18 @@ let GUI = {
     return result
   },
 
+  activate_prop_modal: function(comp){
+    $("#link_item_prop").prop('hidden', false)
+    $("#text_field_variable").val(comp.variable)
+    $("#text_field_color").val(comp.color)
+    let btn_save = function(){
+      comp.variable = $("#text_field_variable").val()
+      comp.color = $("#text_field_color").val()
+      comp.reload(GUI.paper, comp.get_layout_info()).edit_on()
+    }
+    $("#btn_save_item_prop").click(btn_save)
+  },
+
   // --
 
   // Movement
@@ -104,16 +116,12 @@ let GUI = {
   },
 
   move_to: function(a, x, y){
-    if(x != undefined){
-      let x1 = a.getBBox().x
-      GUI.move_by(a, x-x1)
-    }
-    if(y != undefined){
-      let y1 = a.getBBox().y
-      GUI.move_by(a, 0, y-y1)
-    }
+    let x2 = x - a.getBBox().x
+    let y2 = y - a.getBBox().y
+    GUI.move_by(a, x2, y2)
     return a
   },
+
   // --
 
   // Resizing

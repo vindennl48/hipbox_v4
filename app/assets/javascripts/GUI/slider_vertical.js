@@ -44,6 +44,12 @@ GUI.add_component({
     return this
   },
 
+  reload: function(paper, record){
+    this.remove()
+    this.init(paper, record)
+    return this
+  },
+
   default_values: function(layout_id){
     return {
       "id":        undefined,
@@ -63,7 +69,7 @@ GUI.add_component({
   // Size & Position
   x: function(x){ 
     if(x == undefined){ return this.body.getBBox().x }
-    else{ GUI.move_to(this.set, x); return this }
+    else{ GUI.move_to(this.set, x, this.y()); return this }
   },
   y: function(y){ 
     if(y == undefined){ return this.body.getBBox().y }
@@ -124,6 +130,8 @@ GUI.add_component({
       setbb.x + setbb.width/2 - 20,
       setbb.y + setbb.height - 20
     )
+
+    GUI.activate_prop_modal(this)
   },
 
   edit_off: function(){ GUI.clear_charms() },
