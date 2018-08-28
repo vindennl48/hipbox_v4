@@ -11,8 +11,10 @@ let GUI = {
 
   // This is the current raphaeljs paper
   //  and components on that paper
+  //  and snap grid value
   paper: undefined,
   components: [],
+  snap_value: 5,
 
   // This loads the individual components
   //  into the component_list.
@@ -123,11 +125,10 @@ let GUI = {
   },
 
   snap: function(x){
-    //return x%5<3 ? (x%5===0 ? x : Math.floor(x/5)*5) : Math.ceil(x/5)*5
     if(x < 0)
-      return -(Math.floor(Math.abs(x)/5)*5)
+      return -(Math.floor(Math.abs(x)/GUI.snap_value)*GUI.snap_value)
     else
-      return Math.floor(x/5)*5
+      return Math.floor(x/GUI.snap_value)*GUI.snap_value
   },
 
   // --

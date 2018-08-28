@@ -118,7 +118,7 @@ GUI.add_component({
         .attr({fill:'#000', 'stroke-width':3, stroke:'#fff'})
     )
 
-    setbb = this.set.getBBox()
+    setbb = this.body.getBBox()
 
     GUI.move_to(
       width_ball, 
@@ -234,16 +234,19 @@ GUI.add_component({
 
           GUI.charms.width_ball.drag(
             function(dx, dy){
-              let setbb = a.set.getBBox()
-              if (!GUI.charms.width_ball.spos){GUI.charms.width_ball.spos = 0}
-              GUI.move_by(GUI.charms.width_ball, dx-GUI.charms.width_ball.spos, 0)
-              a.width(setbb.width + dx-GUI.charms.width_ball.spos)
+              let ball = GUI.charms.width_ball
+              let ballbb = ball.getBBox()
+              if (!ball.spos){ball.spos = ballbb.x}
+              GUI.move_to(ball, GUI.snap(dx+ball.spos), ballbb.y)
+              a.width(GUI.snap(dx+ball.spos) + (ballbb.width/2) - a.x())
+
+              ball = GUI.charms.height_ball
+              ballbb = ball.getBBox()
               GUI.move_to(
-                GUI.charms.height_ball, 
-                setbb.x + setbb.width/2 - 20,
-                setbb.y + setbb.height - 20
+                ball,
+                a.x() + (a.width()/2) - (ballbb.width/2),
+                ballbb.y
               )
-              GUI.charms.width_ball.spos = dx
             },
             function(){},
             function(){ GUI.charms.width_ball.spos = undefined }
@@ -251,16 +254,19 @@ GUI.add_component({
 
           GUI.charms.height_ball.drag(
             function(dx, dy){
-              let setbb = a.set.getBBox()
-              if (!GUI.charms.height_ball.spos){GUI.charms.height_ball.spos = 0}
-              GUI.move_by(GUI.charms.height_ball, 0, dy-GUI.charms.height_ball.spos)
-              a.height(setbb.height + dy-GUI.charms.height_ball.spos)
+              let ball = GUI.charms.height_ball
+              let ballbb = ball.getBBox()
+              if (!ball.spos){ball.spos = ballbb.y}
+              GUI.move_to(ball, ballbb.x, GUI.snap(dy+ball.spos))
+              a.height(GUI.snap(dy+ball.spos) + (ballbb.height/2) - a.y())
+
+              ball = GUI.charms.width_ball
+              ballbb = ball.getBBox()
               GUI.move_to(
-                GUI.charms.width_ball, 
-                setbb.x + setbb.width - 20,
-                setbb.y + setbb.height/2 -20
+                ball,
+                ballbb.x,
+                a.y() + (a.height()/2) - (ballbb.height/2)
               )
-              GUI.charms.height_ball.spos = dy
             },
             function(){},
             function(){ GUI.charms.height_ball.spos = undefined }
