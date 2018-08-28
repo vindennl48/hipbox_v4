@@ -27,7 +27,7 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <% for layout in layouts %>
-            <%= link_to layout.name, layouts_change_path(id: layout.id), class: 'dropdown-item' %>
+            <%= link_to layout.name, layout_path(layout), method: :put, class: 'dropdown-item' %>
           <% end %>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="javascript:void()" data-toggle="modal", data-target="#newLayoutModal">New </a>

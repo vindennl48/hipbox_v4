@@ -13,6 +13,14 @@ JS.Layouts = {
         setTimeout(waitForInterface, 250)
     }
     waitForInterface()
+
+    let waitForVariables = function(){
+      if(App.variables.sending != undefined)
+        App.variables.update_variables()
+      else
+        setTimeout(waitForVariables, 250)
+    }
+    waitForVariables()
   },
 
   Show: {
@@ -20,7 +28,20 @@ JS.Layouts = {
   },
 
   Edit: {
-    onLoad: function(){ JS.Layouts.onLoad(edit="yes") }
+    onLoad: function(layout_id){
+      JS.Layouts.onLoad(layout_id, edit="yes")
+      for(var i=0; i<GUI.component_list.length; i++){
+        let c = GUI.component_list[i]
+        console.log(c)
+        $("#dropdown_component_list").append(`
+          <a class=" dropdown-item "
+            type="`+c['ctype']+`"
+            href="javascript:void(0)"
+            data-toggle="collapse" data-target="#navbarSupportedContent" 
+            onclick="GUI.add('`+c['ctype']+`', `+layout_id+`)">`+c['name']+`</a>
+        `)
+      }
+    }
   }
 
 }

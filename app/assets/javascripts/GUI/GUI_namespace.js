@@ -36,21 +36,31 @@ let GUI = {
     }
   },
 
+  add: function(ctype, layout_id){
+    GUI.components.push(
+      GUI[ctype].create(
+        GUI.paper,
+        GUI[ctype].default_values(layout_id),
+        edit="yes"
+      )
+    )
+  },
+
   // This sets the variables to new values
   set_values: function(data){},
 
   // Change Value on server
-  change_value: function(data){ App.interface.change_value(data) },
+  change_value: function(data){ App.variables.change_value(data) },
 
   // This gets the layout to save to the db
   save_layout: function(){
-    App.interface.save_layout(this.get('layout'))
+    App.interface.save_layout(GUI.get('layout'))
     alert('Save Successful!')
   },
 
   // This gets the values to save to the db
   save_values: function(){
-    App.interface.save_values(this.get('values'))
+    App.interface.save_values(GUI.get('values'))
   },
 
   // Helper function for getting layout and values

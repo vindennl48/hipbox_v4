@@ -44,6 +44,22 @@ GUI.add_component({
     return this
   },
 
+  default_values: function(layout_id){
+    return {
+      "id":        undefined,
+      "ctype":     this.ctype,
+      "x":         15,
+      "y":         15,
+      "width":     60,
+      "height":    300,
+      "color":     'orange',
+      "extra":     {},
+      "layout_id": layout_id,
+      "variable":  '',
+      "value":     0
+    }
+  },
+
   // Size & Position
   x: function(x){ 
     if(x == undefined){ return this.body.getBBox().x }
@@ -64,16 +80,18 @@ GUI.add_component({
       return this 
     }
   },
+
   height: function(height){
     if(height == undefined){
       return this.body.getBBox().height 
     }
     else{ 
       this.body.attr('height', height)
-      this.set_volume(this.value)
+      this.set_value(this.value, update="no")
       return this
     }
   },
+
   drag: function(a, b, c){
     this.set.drag(a, b, c)
     return this
@@ -140,7 +158,8 @@ GUI.add_component({
   },
 
   // Component Specific
-  set_volume: function(volume=0){
+  set_value: function(volume=0, update="yes"){
+    volume = parseInt(volume)
     if(volume > 127){ volume = 127 }
     else if(volume < 0){ volume = 0 }
     let v_percent = 1 - (volume / 127.0)
@@ -161,6 +180,9 @@ GUI.add_component({
     this.filler.attr('height', setbtm - fillerbb.y)
 
     this.value = volume
+    if(update == "yes"){
+      GUI.change_value({variable: this.variable, value: volume})
+    }
 
     return this
   },
@@ -169,10 +191,7 @@ GUI.add_component({
     let setbb = this.set.getBBox()
     let setbtm = setbb.y + setbb.height
     let volume = ((setbb.height - (y - setbb.y)) * 127) / setbb.height
-    if(volume > 127){ volume = 127 }
-    else if(volume < 0){ volume = 0 }
-    this.set_volume(volume)
-    GUI.change_value({variable: this.variable, value: volume})
+    this.set_value(volume)
     return this
   },
   // --

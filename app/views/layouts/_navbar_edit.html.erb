@@ -6,15 +6,19 @@
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
+
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
+          +Add Item
+        </a>
+        <div id="dropdown_component_list" class="dropdown-menu"></div>
+      </li>
+
       <li class="nav-item">
-        <a class="nav-link" href="javascript:void()"
-          data-toggle="modal", data-target="#addItemModal">+Add Item </a>
+        <a class="nav-link" href="#" data-toggle="modal" data-target="#itemPropertiesModal">Item Properties </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Item Properties </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Layout Properties </a>
+        <a class="nav-link" href="#" data-toggle="modal" data-target="#layoutPropertiesModal">Layout Properties </a>
       </li>
       <li class="nav-item">
         <%= link_to 'Edit Variables', notes_path, class: 'nav-link' %>
@@ -34,45 +38,44 @@
 </nav>
 
 <!-- Modal -->
-<div class="modal fade text-body" id="addItemModal" tabindex="-1" role="dialog" aria-labelledby="addItemModalLabel" aria-hidden="true">
+<div class="modal fade text-body" id="itemPropertiesModal" tabindex="-1" role="dialog" aria-labelledby="itemPropertiesModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="addItemModalLabel">Add Item</h5>
+        <h5 class="modal-title" id="itemPropertiesModalLabel">Item Properties</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <table class=" table table-hover ">
-          <tbody>
-            <tr>
-              <td type="item_select" onclick="$(btn_add).attr('data-ctype', 'slider_vertical')">Slider Vertical</td>
-            </tr>
-            <tr>
-              <td type="item_select" onclick="$(btn_add).attr('data-ctype', 'slider_horizontal')">Slider Horizontal</td>
-            </tr>
-            <tr>
-              <td onclick="$('#btn_add').attr('data-ctype', 'encoder')">Encoder</td>
-            </tr>
-            <tr>
-              <td onclick="$('#btn_add').attr('data-ctype', 'encoder_cc')">Encoder CC</td>
-            </tr>
-            <tr>
-              <td onclick="$('#btn_add').attr('data-ctype', 'button_momentary')">Button Momentary</td>
-            </tr>
-            <tr>
-              <td onclick="$('#btn_add').attr('data-ctype', 'button_toggle')">Button Toggle</td>
-            </tr>
-          </tbody>
-        </table>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal"
           data-toggle="collapse" data-target="#navbarSupportedContent" >Cancel</button>
-        <button id="btn_add" type="button" class="btn btn-primary"
-          data-ctype="slider_vertical" data-dismiss="modal"
-          data-toggle="collapse" data-target="#navbarSupportedContent" >Add+</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal"
+          data-toggle="collapse" data-target="#navbarSupportedContent" >Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade text-body" id="layoutPropertiesModal" tabindex="-1" role="dialog" aria-labelledby="layoutPropertiesModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="layoutPropertiesModalLabel">Layout Properties</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal"
+          data-toggle="collapse" data-target="#navbarSupportedContent" >Cancel</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal"
+          data-toggle="collapse" data-target="#navbarSupportedContent" >Save</button>
       </div>
     </div>
   </div>

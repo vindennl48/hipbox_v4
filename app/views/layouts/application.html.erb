@@ -13,6 +13,7 @@
   </head>
 
   <body class=" text-light ">
+    <script>JS.user_id = <%= current_user.present? ? current_user.id : 0 %></script>
     <%= yield %>
   </body>
 </html>

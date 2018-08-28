@@ -1,14 +1,24 @@
-<div class=" row ">
-  <div class=" col pr-1 ">
+<div class=" row " type="note" id="<%= note.id %>">
+  <div class=" col-8 pr-0 ">
     <div class=" input-group input-group-sm ">
-      <input type="text" class="form-control" placeholder="ch" value="3"></input>
-      <input type="text" class="form-control" placeholder="cc/n" value="cc"></input>
-      <input type="text" class="form-control" placeholder="note" value="11"></input>
+      <input id="variable" type="text" class="form-control" placeholder="variable" value="<%= note.variable %>"></input>
     </div>
   </div>
-  <div class=" col-7 pl-0 ">
+  <% if note.id != nil %>
+    <% pr = 'pr-1' %>
+  <% else %>
+    <% pr = '' %>
+  <% end %>
+  <div class=" col pl-1 <%= pr %> ">
     <div class=" input-group input-group-sm ">
-      <input type="text" class="form-control" placeholder="variable" value="mitch_mitch_vol"></input>
+      <input id="osc" type="text" class="form-control" placeholder="osc" value="<%= note.osc %>"></input>
     </div>
   </div>
+  <% if note.id != nil %>
+    <div class=" col-1 pl-0 pr-0 ">
+      <div class=" input-group input-group-sm ">
+        <%= link_to '-', note, method: :delete, data: {confirm: "Are you sure you want to delete this note?"}, class: 'btn btn-sm btn-danger' %>
+      </div>
+    </div>
+  <% end %>
 </div>
