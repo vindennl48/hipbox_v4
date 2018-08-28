@@ -106,13 +106,13 @@ GUI.add_component({
 
   // Layout saving, changing, etc.
   edit_on: function(){
-    width_ball = GUI.add_to_charm_list(
+    let width_ball = GUI.add_to_charm_list(
       'width_ball',
       this.paper.circle(15, 15, 20)
         .attr({fill:'#000', 'stroke-width':3, stroke:'#fff'})
     )
 
-    height_ball = GUI.add_to_charm_list(
+    let height_ball = GUI.add_to_charm_list(
       'height_ball',
       this.paper.circle(15, 15, 20)
         .attr({fill:'#000', 'stroke-width':3, stroke:'#fff'})

@@ -99,6 +99,8 @@ let GUI = {
 
   activate_prop_modal: function(comp){
     $("#link_item_prop").prop('hidden', false)
+    $("#text_field_variable").attr('placeholder', 'variable')
+    $("#span_variable").text('Variable: ')
     $("#text_field_variable").val(comp.variable)
     $("#text_field_color").val(comp.color)
     let btn_save = function(){
