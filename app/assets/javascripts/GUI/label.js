@@ -1,7 +1,9 @@
 GUI.add_component({
+  // REQUIRED
   ctype: 'label',              // primary key in component table
   name:  'Label',              // display name
 
+  // REQUIRED
   init: function(paper, record){
     // Component Variables
     this.paper     = paper               // raphaeljs paper
@@ -36,12 +38,7 @@ GUI.add_component({
     return this
   },
 
-  reload: function(paper, record){
-    this.remove()
-    this.init(paper, record)
-    return this
-  },
-
+  // REQUIRED
   default_values: function(layout_id){
     return {
       "id":        undefined,
@@ -53,12 +50,13 @@ GUI.add_component({
       "color":     '#fcfdff',
       "extra":     {},
       "layout_id": layout_id,
-      "variable":  '',
-      "value":     'Label'
+      "variable":  'Label',
+      "value":     ''
     }
   },
 
   // Size & Position
+  // REQUIRED
   x: function(x){ 
     if(x == undefined){ return this.body.getBBox().x }
     else{ GUI.move_to(this.set, x, this.y()); return this }
@@ -73,14 +71,12 @@ GUI.add_component({
     else
       return this 
   },
-
   height: function(height){
     if(height == undefined)
       return this.body.getBBox().height 
     else
       return this
   },
-
   drag: function(a, b, c){
     this.set.drag(a, b, c)
     return this
@@ -88,40 +84,7 @@ GUI.add_component({
   // --
 
   // Layout saving, changing, etc.
-  get_layout_info: function(){
-    return {
-      "id":        this.id,
-      "ctype":     this.ctype,
-      "x":         this.x(),
-      "y":         this.y(),
-      "width":     this.width(),
-      "height":    this.height(),
-      "color":     this.color,
-      "extra":     this.extra,
-      "layout_id": this.layout_id,
-      "variable":  this.value,
-      "value":     0.0
-    }
-  },
-
-  get_value_info: function(){
-    return {
-      "id":    this.id,
-      "value": 0.0
-    }
-  },
-
-  remove: function(){
-    this.body.remove()
-  },
-
-  // Component Specific
-  set_value: function(value='', update="yes"){
-    this.body.attr('text', value)
-    this.value = value
-    return this
-  },
-
+  // REQUIRED
   activate_prop_modal: function(){
     $("#link_item_prop").prop('hidden', false)
     $("#text_field_variable").attr('placeholder', 'text')
@@ -132,24 +95,63 @@ GUI.add_component({
     let btn_save = function(){
       a.value = $("#text_field_variable").val()
       a.color = $("#text_field_color").val()
-      //a.reload(GUI.paper, a.get_layout_info()).edit_on()
       a.set_value(a.value)
-      a.body.attr('fill', a.color)
+      a.set_color(a.color)
+    }
+    let btn_destroy = function(){
+      if(confirm('Are you sure you want to remove this item?'))
+        a.destroy()
     }
     $("#btn_save_item_prop").unbind('click').click(btn_save)
+    $("#btn_destroy_item_prop").unbind('click').click(btn_destroy)
   },
 
-  edit_on: function(){
-    GUI.clear_charms() 
-    this.activate_prop_modal()
-    let selector = GUI.add_to_charm_list(
-      'selector',
-      this.paper.rect(this.x(), this.y() + this.height(), this.width(), 10, 0)
-        .attr({fill:'#000', 'stroke-width':3, stroke:'#fff'})
-    )
+  set_color: function(color){
+    this.color = color
+    this.body.attr('fill', this.color)
+  },
+
+  // REQUIRED
+  get_layout_info: function(){
+    if(this.remove_me)
+      return {
+        "id": this.id,
+        "remove": true
+      }
+    else
+      return {
+        "id":        this.id,
+        "ctype":     this.ctype,
+        "x":         this.x(),
+        "y":         this.y(),
+        "width":     this.width(),
+        "height":    this.height(),
+        "color":     this.color,
+        "extra":     this.extra,
+        "layout_id": this.layout_id,
+        "variable":  this.value,
+        "value":     0.0
+      }
+  },
+
+  // REQUIRED
+  get_value_info: function(){
+    return {
+      "id":    this.id,
+      "value": 0.0
+    }
+  },
+
+  // Component Specific
+  // REQUIRED
+  set_value: function(value='', update="yes"){
+    this.body.attr('text', value)
+    this.value = value
+    return this
   },
   // --
 
+  // REQUIRED
   create: function(paper, record, edit="no"){
     let a = Object.create(GUI.label)
       .init(paper, record)
@@ -163,11 +165,31 @@ GUI.add_component({
         function(){ GUI.clear_charms() },
         function(){
           a.spos = undefined
-          a.edit_on()
+          a.activate_prop_modal()
+          let selector = GUI.add_to_charm_list(
+            'selector',
+            a.paper.rect(a.x(), a.y() + a.height(), a.width(), 10, 0)
+              .attr({fill:'#000', 'stroke-width':3, stroke:'#fff'})
+          )
         }
       )
     }
     return a
+  }, 
+
+  // REQUIRED
+  destroy: function(){
+    // remove all raphaeljs elements from paper
+    this.body.remove()
+
+    // remove any charms
+    GUI.clear_charms()
+
+    // re-hide the item property page
+    $("#link_item_prop").prop('hidden', true)
+
+    // flag for removal from database
+    this.remove_me = true
   }
 
 })

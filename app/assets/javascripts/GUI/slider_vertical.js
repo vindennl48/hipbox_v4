@@ -1,7 +1,9 @@
 GUI.add_component({
+  // REQUIRED
   ctype: 'slider_vertical',              // primary key in component table
   name:  'Slider Vertical',              // display name
 
+  // REQUIRED
   init: function(paper, record){
     // Component Variables
     this.paper     = paper               // raphaeljs paper
@@ -44,12 +46,7 @@ GUI.add_component({
     return this
   },
 
-  reload: function(paper, record){
-    this.remove()
-    this.init(paper, record)
-    return this
-  },
-
+  // REQUIRED
   default_values: function(layout_id){
     return {
       "id":        undefined,
@@ -67,6 +64,7 @@ GUI.add_component({
   },
 
   // Size & Position
+  // REQUIRED
   x: function(x){ 
     if(x == undefined){ return this.body.getBBox().x }
     else{ GUI.move_to(this.set, x, this.y()); return this }
@@ -86,7 +84,6 @@ GUI.add_component({
       return this 
     }
   },
-
   height: function(height){
     if(height == undefined){
       return this.body.getBBox().height 
@@ -97,7 +94,6 @@ GUI.add_component({
       return this
     }
   },
-
   drag: function(a, b, c){
     this.set.drag(a, b, c)
     return this
@@ -105,53 +101,58 @@ GUI.add_component({
   // --
 
   // Layout saving, changing, etc.
-  edit_on: function(){
-    let width_ball = GUI.add_to_charm_list(
-      'width_ball',
-      this.paper.circle(15, 15, 20)
-        .attr({fill:'#000', 'stroke-width':3, stroke:'#fff'})
-    )
-
-    let height_ball = GUI.add_to_charm_list(
-      'height_ball',
-      this.paper.circle(15, 15, 20)
-        .attr({fill:'#000', 'stroke-width':3, stroke:'#fff'})
-    )
-
-    setbb = this.body.getBBox()
-
-    GUI.move_to(
-      width_ball, 
-      setbb.x + setbb.width - 20,
-      setbb.y + setbb.height/2 - 20
-    )
-    GUI.move_to(
-      height_ball, 
-      setbb.x + setbb.width/2 - 20,
-      setbb.y + setbb.height - 20
-    )
-
-    GUI.activate_prop_modal(this)
-  },
-
-  edit_off: function(){ GUI.clear_charms() },
-
-  get_layout_info: function(){
-    return {
-      "id":        this.id,
-      "ctype":     this.ctype,
-      "x":         this.x(),
-      "y":         this.y(),
-      "width":     this.width(),
-      "height":    this.height(),
-      "color":     this.color,
-      "extra":     this.extra,
-      "layout_id": this.layout_id,
-      "variable":  this.variable,
-      "value":     this.value
+  // REQUIRED
+  activate_prop_modal: function(){
+    $("#link_item_prop").prop('hidden', false)
+    $("#text_field_variable").attr('placeholder', 'variable')
+    $("#span_variable").text('Variable: ')
+    $("#text_field_variable").val(this.variable)
+    $("#text_field_color").val(this.color)
+    let a = this
+    let btn_save = function(){
+      a.variable = $("#text_field_variable").val()
+      a.color = $("#text_field_color").val()
+      a.set_color(a.color)
     }
+    let btn_destroy = function(){
+      if(confirm('Are you sure you want to remove this item?'))
+        a.destroy()
+    }
+    $("#btn_save_item_prop").unbind('click').click(btn_save)
+    $("#btn_destroy_item_prop").unbind('click').click(btn_destroy)
   },
 
+  set_color: function(color){
+    this.color = color
+    this.body.attr('stroke', color)
+    this.filler.attr('stroke', color)
+    this.handle.attr({fill:color, stroke:color})
+  },
+
+  // REQUIRED
+  get_layout_info: function(){
+    if(this.remove_me)
+      return {
+        "id": this.id,
+        "remove": true
+      }
+    else
+      return {
+        "id":        this.id,
+        "ctype":     this.ctype,
+        "x":         this.x(),
+        "y":         this.y(),
+        "width":     this.width(),
+        "height":    this.height(),
+        "color":     this.color,
+        "extra":     this.extra,
+        "layout_id": this.layout_id,
+        "variable":  this.variable,
+        "value":     this.value
+      }
+  },
+
+  // REQUIRED
   get_value_info: function(){
     return {
       "id":    this.id,
@@ -159,25 +160,19 @@ GUI.add_component({
     }
   },
 
-  remove: function(){
-    this.body.remove()
-    this.filler.remove()
-    this.handle.remove()
-  },
-
   // Component Specific
+  // REQUIRED
   set_value: function(volume=0, update="yes"){
     volume = parseInt(volume)
     if(volume > 127){ volume = 127 }
     else if(volume < 0){ volume = 0 }
 
+    // converts volume to inverse percent of 0-127
     let v_percent = 1 - (volume / 127.0)
 
-    let setbb = this.body.getBBox()
-    let setbtm = setbb.y + setbb.height
-
+    // -- calculates new position and size of handle and filler --
     let handlebb = this.handle.getBBox()
-    let handle_new_pos = ((setbb.height - handlebb.height) * v_percent) + setbb.y
+    let handle_new_pos = ((this.height() - handlebb.height) * v_percent) + this.y()
 
     let fillerbb = this.filler.getBBox()
     let filler_y = fillerbb.y
@@ -186,25 +181,26 @@ GUI.add_component({
     this.handle.translate(0, handle_new_pos - handlebb.y)
     this.filler.translate(0, filler_new_pos - fillerbb.y)
     fillerbb = this.filler.getBBox()
-    this.filler.attr('height', setbtm - fillerbb.y)
+    this.filler.attr('height', this.y() + this.height() - fillerbb.y)
+    // --
 
     this.value = volume
-    if(update == "yes"){
+    // sends new data to server if applicable.
+    //  this option exists to prevent feed-back loops
+    if(update == "yes")
       GUI.change_value({variable: this.variable, value: volume})
-    }
 
     return this
   },
 
   touch_volume: function(y){
-    let setbb = this.set.getBBox()
-    let setbtm = setbb.y + setbb.height
-    let volume = ((setbb.height - (y - setbb.y)) * 127) / setbb.height
+    let volume = ((this.height() - (y - this.y())) * 127) / this.height()
     this.set_value(volume)
     return this
   },
   // --
 
+  // REQUIRED
   create: function(paper, record, edit="no"){
     let a = Object.create(GUI.slider_vertical)
       .init(paper, record)
@@ -219,20 +215,21 @@ GUI.add_component({
         function(){}
       )
     }
-
     else {
       a.drag(
         function(dx, dy){
           if (!a.spos){a.spos = {x:a.x(), y:a.y()}}
           GUI.move_to(a.set, GUI.snap(dx+a.spos.x), GUI.snap(dy+a.spos.y))
         },
-        function(){ a.edit_off() },
+        function(){ GUI.clear_charms() },
         function(){ 
           a.spos = undefined
-          //a.sposm = undefined
-          a.edit_on(paper)
 
-          GUI.charms.width_ball.drag(
+          let width_ball = GUI.add_to_charm_list(
+            'width_ball',
+            a.paper.circle(15, 15, 20)
+              .attr({fill:'#000', 'stroke-width':3, stroke:'#fff'})
+          ).drag(
             function(dx, dy){
               let ball = GUI.charms.width_ball
               let ballbb = ball.getBBox()
@@ -252,7 +249,11 @@ GUI.add_component({
             function(){ GUI.charms.width_ball.spos = undefined }
           )
 
-          GUI.charms.height_ball.drag(
+          let height_ball = GUI.add_to_charm_list(
+            'height_ball',
+            a.paper.circle(15, 15, 20)
+              .attr({fill:'#000', 'stroke-width':3, stroke:'#fff'})
+          ).drag(
             function(dx, dy){
               let ball = GUI.charms.height_ball
               let ballbb = ball.getBBox()
@@ -272,10 +273,40 @@ GUI.add_component({
             function(){ GUI.charms.height_ball.spos = undefined }
           )
 
+          GUI.move_to(
+            width_ball, 
+            a.x() + a.width() - 20,
+            a.y() + a.height()/2 - 20
+          )
+          GUI.move_to(
+            height_ball, 
+            a.x() + a.width()/2 - 20,
+            a.y() + a.height() - 20
+          )
+
+          a.activate_prop_modal()
+
         }
       )
     }
     return a
+  },
+
+  // REQUIRED
+  destroy: function(){
+    // remove all raphaeljs elements from paper
+    this.body.remove()
+    this.filler.remove()
+    this.handle.remove()
+
+    // remove any charms
+    GUI.clear_charms()
+
+    // re-hide the item property page
+    $("#link_item_prop").prop('hidden', true)
+
+    // flag for removal from database
+    this.remove_me = true
   }
 
 })

@@ -1,20 +1,10 @@
 let GUI = {
 
+  // -- Global functions --
   // This stores all of the individual
   //  types of components that can be
   //  added to the screen.
   component_list: [],
-
-  // This stores all of the individual
-  //  resizing charms/balls on the screen
-  charms: {},
-
-  // This is the current raphaeljs paper
-  //  and components on that paper
-  //  and snap grid value
-  paper: undefined,
-  components: [],
-  snap_value: 5,
 
   // This loads the individual components
   //  into the component_list.
@@ -26,31 +16,32 @@ let GUI = {
     GUI[component.ctype] = component
   },
 
-  // This loads the current layout onto
-  //  the screen.
-  load: function(components, edit="no"){
-    for(var i=0; i<GUI.components.length; i++)
-      GUI.components[i].remove()
-    GUI.components = []
-    for(var i=0; i<components.length; i++){
-      let c = components[i]
-      GUI.components.push( GUI[c.ctype].create(GUI.paper, c, edit) )
-    }
+  move_by: function(a, x=0, y=0){
+    a.translate(x, y)
+    return a
   },
 
-  add: function(ctype, layout_id){
-    GUI.components.push(
-      GUI[ctype].create(
-        GUI.paper,
-        GUI[ctype].default_values(layout_id),
-        edit="yes"
-      )
-    )
+  move_to: function(a, x, y){
+    let x2 = x - a.getBBox().x
+    let y2 = y - a.getBBox().y
+    GUI.move_by(a, x2, y2)
+    return a
   },
 
+  snap: function(x){
+    if(x < 0)
+      return -(Math.floor(Math.abs(x)/GUI.snap_value)*GUI.snap_value)
+    else
+      return Math.floor(x/GUI.snap_value)*GUI.snap_value
+  },
+  // --
+
+
+  // -- Interaction with server --
   // This sets the variables to new values
   set_values: function(data){
     if(data.user_id == 0){
+      // the timeout seems to do better performance wise
       setTimeout(function(){
         for(var i=0; i<data.note.length; i++){
           for(var j=0; j<GUI.components.length; j++){
@@ -82,6 +73,42 @@ let GUI = {
   // This gets the values to save to the db
   save_values: function(){
     App.interface.save_values(GUI.get('values'))
+    alert('Save Successful!')
+  },
+  // --
+
+
+  // -- Layout Functions --
+  // This stores all of the individual
+  //  resizing charms/balls on the screen
+  charms: {},
+
+  // This is the current raphaeljs paper
+  //  and components on that paper
+  //  and snap grid value
+  paper: undefined,
+  components: [],
+  snap_value: 5,
+
+  // Adds component to paper
+  add: function(ctype, layout_id){
+    GUI.components.push(
+      GUI[ctype].create(
+        GUI.paper,
+        GUI[ctype].default_values(layout_id),
+        edit="yes"
+      )
+    )
+  },
+
+  // This loads the current layout onto
+  //  the screen.
+  load: function(components, edit="no"){
+    GUI.components = []
+    for(var i=0; i<components.length; i++){
+      let c = components[i]
+      GUI.components.push( GUI[c.ctype].create(GUI.paper, c, edit) )
+    }
   },
 
   // Helper function for getting layout and values
@@ -97,45 +124,6 @@ let GUI = {
     return result
   },
 
-  activate_prop_modal: function(comp){
-    $("#link_item_prop").prop('hidden', false)
-    $("#text_field_variable").attr('placeholder', 'variable')
-    $("#span_variable").text('Variable: ')
-    $("#text_field_variable").val(comp.variable)
-    $("#text_field_color").val(comp.color)
-    let btn_save = function(){
-      comp.variable = $("#text_field_variable").val()
-      comp.color = $("#text_field_color").val()
-      comp.reload(GUI.paper, comp.get_layout_info()).edit_on()
-    }
-    $("#btn_save_item_prop").unbind('click').click(btn_save)
-  },
-
-  // --
-
-  // Movement
-  move_by: function(a, x=0, y=0){
-    a.translate(x, y)
-    return a
-  },
-
-  move_to: function(a, x, y){
-    let x2 = x - a.getBBox().x
-    let y2 = y - a.getBBox().y
-    GUI.move_by(a, x2, y2)
-    return a
-  },
-
-  snap: function(x){
-    if(x < 0)
-      return -(Math.floor(Math.abs(x)/GUI.snap_value)*GUI.snap_value)
-    else
-      return Math.floor(x/GUI.snap_value)*GUI.snap_value
-  },
-
-  // --
-
-  // Resizing
   clear_charms: function(){
     for (var key in GUI.charms)
       GUI.charms[key].remove()
