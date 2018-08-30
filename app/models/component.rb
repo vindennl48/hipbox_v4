@@ -31,7 +31,6 @@ class Component < ApplicationRecord
           layout_id: layout.id,
           extra: d['extra']
         )
-        puts "new update record: #{layout}, #{d}"
       end
     end
   end

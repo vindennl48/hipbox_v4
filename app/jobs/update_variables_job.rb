@@ -6,10 +6,12 @@ class UpdateVariablesJob < ApplicationJob
   #  sync up during regular operation (which happens
   #  way more often than I would like..)
   def perform
-    loop do
-      ActionCable.server.broadcast "variables_channel",
-        {user_id: 0, note: Note.all}
-      sleep(10)
+    Thread.new do
+      loop do
+        ActionCable.server.broadcast "variables_channel",
+          {user_id: 0, note: Note.all}
+        sleep(5)
+      end
     end
   end
 

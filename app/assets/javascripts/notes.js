@@ -9,16 +9,25 @@ JS.Notes = {
       let variable = $(note).find("#variable").val()
       let osc = $(note).find("#osc").val()
       if(note.id == ""){
-        App.interface.note_new({
-          'variable': variable,
-          'osc': osc,
+        $.ajax({url: '/notes/ajax_new',
+          type: 'POST',
+          dataType: 'json',
+          data: {variable: variable, osc: osc},
+          error: function(response){
+            alert('Save Note Failed..')
+            console.log(response)
+          },
         })
       }
       else{
-        App.interface.note_update({
-          'id': note.id,
-          'variable': variable,
-          'osc': osc
+        $.ajax({url: '/notes/ajax_update',
+          type: 'POST',
+          dataType: 'json',
+          data: {id: note.id, variable: variable, osc: osc},
+          error: function(response){
+            alert('Update Note Failed..')
+            console.log(response)
+          },
         })
       }
     })

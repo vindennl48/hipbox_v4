@@ -10,4 +10,18 @@ class NotesController < ApplicationController
     redirect_to notes_path
   end
 
+  def ajax_new
+    Note.create(variable: params[:variable], osc: params[:osc])
+    return 0
+  end
+
+  def ajax_update
+    Note.update(params[:id], variable: params[:variable], osc: params[:osc])
+    return 0
+  end
+
+  def ajax_get_variables
+    render json: Note.all
+  end
+
 end

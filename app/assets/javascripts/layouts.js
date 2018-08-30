@@ -3,24 +3,33 @@ JS.Layouts = {
     let width = document.getElementById("wrap_gui").clientWidth
     let height = window.innerHeight
     GUI.paper = Raphael(
-      document.getElementById('wrap'), width, height)
-      .setViewBox(0, 0, width, height, true)
+      document.getElementById('wrap'), width, height
+    ).setViewBox(0, 0, width, height, true)
+    JS.Layouts.Load()
+  },
 
-    let waitForInterface = function(){
-      if(App.interface.initialized != undefined)
-        App.interface.load_gui(edit) 
-      else
-        setTimeout(waitForInterface, 250)
-    }
-    waitForInterface()
+  Load: function(){
+    $.ajax({url: '/layouts/ajax_load',
+      type: 'GET',
+      success: function(response){
+        GUI.load(response, edit)
+        JS.Layouts.GetVariables()
+      },
+      error: function(response){
+        alert('Save Layout Failed..')
+        console.log(response)
+      }
+    })
+  },
 
-    let waitForVariables = function(){
-      if(App.variables.sending != undefined)
-        App.variables.update_variables()
-      else
-        setTimeout(waitForVariables, 250)
-    }
-    waitForVariables()
+  GetVariables: function(){
+    $.ajax({url: '/notes/ajax_get_variables',
+      type: 'GET',
+      success: function(response){
+        GUI.set_values({user_id:0, note:response})
+      },
+      error: function(response){ console.log('Issue getting variables: ', response) }
+    })
   },
 
   Show: {
@@ -33,7 +42,6 @@ JS.Layouts = {
 
       for(var i=0; i<GUI.component_list.length; i++){
         let c = GUI.component_list[i]
-        console.log(c)
         $("#dropdown_component_list").append(`
           <a class=" dropdown-item "
             type="`+c['ctype']+`"

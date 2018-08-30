@@ -1,6 +1,4 @@
 class ComponentsController < ApplicationController
-
-  def update
-  end
+  before_action :authenticate_user!
 
 end

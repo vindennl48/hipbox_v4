@@ -42,22 +42,22 @@ let GUI = {
   set_values: function(data){
     if(data.user_id == 0){
       // the timeout seems to do better performance wise
-      setTimeout(function(){
+      //setTimeout(function(){
         for(var i=0; i<data.note.length; i++){
           for(var j=0; j<GUI.components.length; j++){
             if(GUI.components[j].variable == data.note[i].variable)
               GUI.components[j].set_value(data.note[i].value, update="no")
           }
         }
-      }, 500)
+      //}, 500)
     }
     else if(data.user_id != JS.user_id){
-      setTimeout(function(){
+      //setTimeout(function(){
         for(var i=0; i<GUI.components.length; i++){
           if(GUI.components[i].variable == data.note.variable)
             GUI.components[i].set_value(data.note.value, update="no")
         }
-      }, 10)
+      //}, 10)
     }
   },
 
@@ -66,14 +66,32 @@ let GUI = {
 
   // This gets the layout to save to the db
   save_layout: function(){
-    App.interface.save_layout(GUI.get('layout'))
-    alert('Save Successful!')
+    $.ajax({url: '/layouts/ajax_save',
+      type: 'POST',
+      dataType: 'json',
+      data: {data: JSON.stringify(GUI.get('layout'))},
+      success: function(){ alert('Save Successful!') },
+      error: function(response){
+        alert('Save Layout Failed..')
+        console.log(response)
+      }
+    })
   },
 
   // This gets the values to save to the db
   save_values: function(){
-    App.interface.save_values(GUI.get('values'))
-    alert('Save Successful!')
+    $.ajax({url: '/layouts/ajax_save_values',
+      type: 'POST',
+      dataType: 'json',
+      data: {data: JSON.stringify(GUI.get('values'))},
+      success: function(){
+        alert('Save Successful!')
+      },
+      error: function(response){
+        alert('Save Layout Failed..')
+        console.log(response)
+      }
+    })
   },
   // --
 
