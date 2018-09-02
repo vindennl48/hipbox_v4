@@ -1,7 +1,7 @@
 GUI.add_component({
   // REQUIRED
-  ctype: 'slider_vertical',              // primary key in component table
-  name:  'Slider Vertical Generic',      // display name
+  ctype: 'slider_volume',                // primary key in component table
+  name:  'Volume',                       // display name
 
   // REQUIRED
   init: function(paper, record){
@@ -17,7 +17,7 @@ GUI.add_component({
 
     // RaphaelJS Items
     // temporary defaults
-    let x = 0, y = 0, width = 60, height = 300
+    let x = 0, y = 0, width = 60, height = 300, fsize = 28
 
     this.body = paper.rect(x, y, width, height, 3)
       .attr({fill:'black', 'stroke-width':3, stroke:this.color})
@@ -27,6 +27,18 @@ GUI.add_component({
 
     this.handle = paper.rect(x, y, width, 10, 3)
       .attr({fill:this.color, 'stroke-width':0, stroke:this.color})
+
+    this.db0 = paper.text(x+width/2, y+((1-(107/127))*height), '-0-')
+      .attr({fill:'#fcfcfc', 'font-size':fsize})
+
+    this.db6 = paper.text(x+width/2, y+((1-(88/127))*height), '-6-')
+      .attr({fill:'#fcfcfc', 'font-size':fsize})
+
+    this.db12 = paper.text(x+width/2, y+((1-(70/127))*height), '-12-')
+      .attr({fill:'#fcfcfc', 'font-size':fsize})
+
+    this.db18 = paper.text(x+width/2, y+((1-(52/127))*height), '-18-')
+      .attr({fill:'#fcfcfc', 'font-size':fsize})
     // --
 
     // Container to hold all the pieces
@@ -34,6 +46,10 @@ GUI.add_component({
       .push(this.body)
       .push(this.filler)
       .push(this.handle)
+      .push(this.db0)
+      .push(this.db6)
+      .push(this.db12)
+      .push(this.db18)
     // --
 
     // Move into position and resize
@@ -81,6 +97,26 @@ GUI.add_component({
       this.body.attr('width', width)
       this.filler.attr('width', width)
       this.handle.attr('width', width)
+      GUI.move_to(
+        this.db0,
+        (-this.db0.getBBox().width/2)+this.x()+this.width()/2,
+        this.db0.getBBox().y
+      )
+      GUI.move_to(
+        this.db6,
+        (-this.db6.getBBox().width/2)+this.x()+this.width()/2,
+        this.db6.getBBox().y
+      )
+      GUI.move_to(
+        this.db12,
+        (-this.db12.getBBox().width/2)+this.x()+this.width()/2,
+        this.db12.getBBox().y
+      )
+      GUI.move_to(
+        this.db18,
+        (-this.db18.getBBox().width/2)+this.x()+this.width()/2,
+        this.db18.getBBox().y
+      )
       return this 
     }
   },
@@ -90,6 +126,26 @@ GUI.add_component({
     }
     else{ 
       this.body.attr('height', height)
+      GUI.move_to(
+        this.db0,
+        this.db0.getBBox().x,
+        (-this.db0.getBBox().height/2)+this.y()+((1-(107/127))*height)
+      )
+      GUI.move_to(
+        this.db6,
+        this.db6.getBBox().x,
+        (-this.db6.getBBox().height/2)+this.y()+((1-(88/127))*height)
+      )
+      GUI.move_to(
+        this.db12,
+        this.db12.getBBox().x,
+        (-this.db12.getBBox().height/2)+this.y()+((1-(70/127))*height)
+      )
+      GUI.move_to(
+        this.db18,
+        this.db18.getBBox().x,
+        (-this.db18.getBBox().height/2)+this.y()+((1-(52/127))*height)
+      )
       this.set_value(this.value, update="no")
       return this
     }
@@ -202,7 +258,7 @@ GUI.add_component({
 
   // REQUIRED
   create: function(paper, record, edit="no"){
-    let a = Object.create(GUI.slider_vertical)
+    let a = Object.create(GUI.slider_volume)
       .init(paper, record)
 
     if(edit == "no"){

@@ -16,6 +16,7 @@ class VariablesChannel < ApplicationCable::Channel
       ActionCable.server.broadcast "variables_channel",
         {user_id: current_user.id, note: note}
       $OSCRUBY.send OSC::Message.new(note.osc, data['value'])
+      #puts "Note: #{note.osc}, #{data['value']}"
     end
   end
 end
