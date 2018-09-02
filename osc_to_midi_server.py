@@ -3,14 +3,14 @@ import types, pygame.midi
 
 pygame.midi.init()
 members = {
-    'fcb1010': 0,
-    'james'  : 1,
-    'jesse'  : 2,
-    'mitch'  : 3,
-    'drums'  : 4,
+    '0': 0,
+    '1'  : 1,
+    '2'  : 2,
+    '3'  : 3,
+    '4'  : 4,
 }
 ntypes = "n cc".split()
-midi_out = 3
+midi_out = 5
 
 def run(server):
 
@@ -27,10 +27,15 @@ def run(server):
         print("--------------")
         print("path:   {}".format(path))
         print("member: {}".format(member_name))
+        print("ntype:  {}".format(member))
         print("note:   {}".format(note))
         print("value:  {}".format(args[0]))
         print("--------------")
-        pygame.midi.Output(midi_out).write_short(member, note, args[0])
+        pygame.midi.Output(midi_out).write_short(
+            int(member),
+            int(note),
+            int(args[0])
+        )
 
     def handle_error(self,request,client_address): pass
 
@@ -41,11 +46,9 @@ def run(server):
 
     server.handle_error = types.MethodType(handle_error, server)
 
-    while True:
-        server.handle_request()
-        # print("a")
+    threading.Thread( target = server.serve_forever ).start()
 
 if __name__ == "__main__":
-    server = OSCServer(("172.21.0.1", 4004))
+    server = OSCServer(("192.168.99.1", 4004))
     run(server)
-    server.close()
+
