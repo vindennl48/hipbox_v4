@@ -16,7 +16,7 @@ JS.Layouts = {
         JS.Layouts.GetVariables()
       },
       error: function(response){
-        alert('Save Layout Failed..')
+        alert('Load Layout Failed..')
         console.log(response)
       }
     })
