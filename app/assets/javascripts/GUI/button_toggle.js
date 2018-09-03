@@ -112,23 +112,39 @@ GUI.add_component({
   // Layout saving, changing, etc.
   // REQUIRED
   activate_prop_modal: function(){
-    $("#link_item_prop").prop('hidden', false)
-    $("#text_field_variable").attr('placeholder', 'variable')
-    $("#span_variable").text('Variable: ')
-    $("#text_field_variable").val(this.variable)
-    $("#text_field_color").val(this.color)
     let a = this
-    let btn_save = function(){
-      a.variable = $("#text_field_variable").val()
-      a.color = $("#text_field_color").val()
-      a.set_color(a.color)
-    }
-    let btn_destroy = function(){
-      if(confirm('Are you sure you want to remove this item?'))
-        a.destroy()
-    }
-    $("#btn_save_item_prop").unbind('click').click(btn_save)
-    $("#btn_destroy_item_prop").unbind('click').click(btn_destroy)
+    $.ajax({url: '/components/ajax_modal',
+      type: 'GET',
+      data: {
+        partial: "/components/button_toggle_modal",
+        variable: this.variable,
+        color:    this.color,
+        id:       this.id
+      },
+      success: function(response){
+        $("#link_item_prop")
+          .prop('hidden', false)
+          .click(function(){ $("#buttonToggleModal").modal('show') })
+        $('#componentModalBody').html(response)
+
+        let btn_save = function(){
+          a.variable = $("#text_field_variable").val().toLowerCase()
+          a.color = $("#text_field_color").val().toLowerCase()
+          a.set_color(a.color)
+        }
+        let btn_destroy = function(){
+          if(confirm('Are you sure you want to remove this item?'))
+            a.destroy()
+        }
+        $("#btn_save").click(btn_save)
+        $("#btn_destroy").click(btn_destroy)
+      },
+      error: function(response){
+        alert('Load buttonToggleModal failed..')
+        console.log(response)
+      }
+    })
+
   },
 
   set_color: function(color){

@@ -20,7 +20,7 @@ GUI.add_component({
     let x = 50, y = 50
 
     this.body = paper.text(x, y, this.value)
-      .attr({fill:this.color, 'font-size':30})
+      .attr({fill:this.color, 'font-size':this.extra['size']})
     // --
 
     // Container to hold all the pieces
@@ -48,7 +48,10 @@ GUI.add_component({
       "width":     100,
       "height":    22.5,
       "color":     '#fcfdff',
-      "extra":     {},
+      "extra":     {
+        text: 'Label',
+        size: 30
+      },
       "layout_id": layout_id,
       "variable":  'Label',
       "value":     ''
@@ -86,29 +89,51 @@ GUI.add_component({
   // Layout saving, changing, etc.
   // REQUIRED
   activate_prop_modal: function(){
-    $("#link_item_prop").prop('hidden', false)
-    $("#text_field_variable").attr('placeholder', 'text')
-    $("#span_variable").text('Text: ')
-    $("#text_field_variable").val(this.value)
-    $("#text_field_color").val(this.color)
     let a = this
-    let btn_save = function(){
-      a.value = $("#text_field_variable").val()
-      a.color = $("#text_field_color").val()
-      a.set_value(a.value)
-      a.set_color(a.color)
-    }
-    let btn_destroy = function(){
-      if(confirm('Are you sure you want to remove this item?'))
-        a.destroy()
-    }
-    $("#btn_save_item_prop").unbind('click').click(btn_save)
-    $("#btn_destroy_item_prop").unbind('click').click(btn_destroy)
+    $.ajax({url: '/components/ajax_modal',
+      type: 'GET',
+      data: {
+        partial: "/components/label_modal",
+        label_text: this.value,
+        size: this.extra['size'],
+        color: this.color
+      },
+      success: function(response){
+        $("#link_item_prop")
+          .prop('hidden', false)
+          .click(function(){ $("#labelModal").modal('show') })
+        $('#componentModalBody').html(response)
+
+        let btn_save = function(){
+          a.value = $("#text_field_label").val()
+          a.set_size($("#text_field_size").val())
+          a.color = $("#text_field_color").val().toLowerCase()
+          a.set_color(a.color)
+        }
+        let btn_destroy = function(){
+          if(confirm('Are you sure you want to remove this item?'))
+            a.destroy()
+        }
+        $("#btn_save").click(btn_save)
+        $("#btn_destroy").click(btn_destroy)
+      },
+      error: function(response){
+        alert('Load sliderVolumeModal failed..')
+        console.log(response)
+      }
+    })
   },
 
   set_color: function(color){
     this.color = color
     this.body.attr('fill', this.color)
+    return this
+  },
+
+  set_size: function(size){
+    this.extra['size'] = size
+    this.body.attr('font-size', size)
+    return this
   },
 
   // REQUIRED
