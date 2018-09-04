@@ -109,6 +109,7 @@ GUI.add_component({
           a.set_size($("#text_field_size").val())
           a.color = $("#text_field_color").val().toLowerCase()
           a.set_color(a.color)
+          a.set_value(a.value)
         }
         let btn_destroy = function(){
           if(confirm('Are you sure you want to remove this item?'))

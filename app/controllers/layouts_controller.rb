@@ -22,6 +22,7 @@ class LayoutsController < ApplicationController
   def destroy
     Layout.find(params[:id]).destroy
     Layout.get_current_layout(current_user)
+    puts "layout id: #{current_user.layout}"
     redirect_to root_path
   end
 

@@ -1,12 +1,15 @@
 class Layout < ApplicationRecord
   belongs_to :user
+  has_many :components, :dependent => :destroy
 
   def self.get_current_layout(user)
     if !user.layout.nil? and Layout.exists? id: user.layout
       return Layout.find(user.layout)
     else
       if Layout.exists? user_id: user.id
-        return Layout.where(user_id: user.id).first
+        layout = Layout.where(user_id: user.id).first
+        User.update(user.id, layout: layout.id)
+        return layout
       else
         return self.get_default_layout(user)
       end

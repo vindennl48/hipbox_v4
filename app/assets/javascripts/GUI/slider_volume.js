@@ -176,7 +176,7 @@ GUI.add_component({
 
         let btn_save = function(){
           a.variable = $("#text_field_variable").val()
-            .toLowerCase().replace(' ', '_')
+            .toLowerCase().replace(/ /g, '_')
           a.color = $("#text_field_color").val().toLowerCase()
           a.set_color(a.color)
         }
