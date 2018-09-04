@@ -128,7 +128,8 @@ GUI.add_component({
         $('#componentModalBody').html(response)
 
         let btn_save = function(){
-          a.variable = $("#text_field_variable").val().toLowerCase()
+          a.variable = $("#text_field_variable").val()
+            .toLowerCase().replace(' ', '_')
           a.color = $("#text_field_color").val().toLowerCase()
           a.set_color(a.color)
         }

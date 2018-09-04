@@ -86,6 +86,7 @@ let GUI = {
       data: {data: JSON.stringify(GUI.get('values'))},
       success: function(){
         alert('Save Successful!')
+        location.reload(true)
       },
       error: function(response){
         alert('Save Layout Failed..')
@@ -153,5 +154,10 @@ let GUI = {
     return a
   },
   // --
+
+  // Red dot to signify levels are off of the saved values
+  dirty_levels: function(){
+    $("#dirty_levels").removeAttr('hidden')
+  },
 
 }

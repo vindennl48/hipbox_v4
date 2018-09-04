@@ -36,3 +36,14 @@ body {
   @extend .d-lg-none;
 }
 
+.badge-holder {
+  position: relative;
+}
+
+.badge {
+  font-size: 10px;
+  position: absolute;
+  top: 0px;
+  right: -15px;
+}
+

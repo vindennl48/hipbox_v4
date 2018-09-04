@@ -33,7 +33,15 @@ JS.Layouts = {
   },
 
   Show: {
-    onLoad: function(){ JS.Layouts.onLoad(edit="no") }
+    onLoad: function(){ JS.Layouts.onLoad(edit="no") },
+
+    Reset: function(){
+      for(var i=0; i<GUI.components.length; i++){
+        if(GUI.components[i].saved_value != undefined)
+          GUI.components[i].set_value(GUI.components[i].saved_value)
+      }
+      $("#dirty_levels").attr('hidden', true)
+    }
   },
 
   Edit: {

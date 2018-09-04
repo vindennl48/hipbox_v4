@@ -7,6 +7,7 @@ JS.Notes = {
     let notes = $("div[type='note']")
     $.each($("div[type='note']"), function(i, note){
       let variable = $(note).find("#variable").val()
+        .toLowerCase().replace(' ', '_')
       let osc = $(note).find("#osc").val()
       if(note.id == ""){
         $.ajax({url: '/notes/ajax_new',

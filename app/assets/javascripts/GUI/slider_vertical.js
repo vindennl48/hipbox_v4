@@ -1,18 +1,19 @@
 GUI.add_component({
   // REQUIRED
-  ctype: 'slider_vertical',              // primary key in component table
-  name:  'Slider Vertical Generic',      // display name
+  ctype: 'slider_vertical',                // name of component
+  name:  'Slider Vertical Generic',        // display name
 
   // REQUIRED
   init: function(paper, record){
     // Component Variables
-    this.paper     = paper               // raphaeljs paper
-    this.id        = record['id']        // primary key in component table
-    this.color     = record['color']     // base color value
-    this.extra     = record['extra']     // anything extra needed
-    this.variable  = record['variable']  // midi note variable
-    this.value     = record['value']     // saved value
-    this.layout_id = record['layout_id'] // saved value
+    this.paper       = paper               // raphaeljs paper
+    this.id          = record['id']        // primary key in component table
+    this.color       = record['color']     // base color value
+    this.extra       = record['extra']     // anything extra needed
+    this.variable    = record['variable']  // midi note variable
+    this.value       = record['value']     // saved value
+    this.saved_value = record['value']     // saved value
+    this.layout_id   = record['layout_id'] // saved value
     // --
 
     // RaphaelJS Items
@@ -118,7 +119,8 @@ GUI.add_component({
         $('#componentModalBody').html(response)
 
         let btn_save = function(){
-          a.variable = $("#text_field_variable").val().toLowerCase()
+          a.variable = $("#text_field_variable").val()
+            .toLowerCase().replace(' ', '_')
           a.color = $("#text_field_color").val().toLowerCase()
           a.set_color(a.color)
         }
@@ -197,6 +199,9 @@ GUI.add_component({
     fillerbb = this.filler.getBBox()
     this.filler.attr('height', this.y() + this.height() - fillerbb.y)
     // --
+
+    if(this.saved_value != volume)
+      GUI.dirty_levels()
 
     this.value = volume
     // sends new data to server if applicable.
