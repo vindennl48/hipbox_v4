@@ -8,8 +8,14 @@ class UpdateVariablesJob < ApplicationJob
   def perform
     Thread.new do
       loop do
-        ActionCable.server.broadcast "variables_channel",
-          {user_id: 0, note: Note.all}
+        if not $REDIS.exists('pause')
+          notes = Note.all
+          ActionCable.server.broadcast "variables_channel",
+            {user_id: 0, note: notes}
+          notes.each do |note|
+            $OSCRUBY.send OSC::Message.new(note.osc, 127)
+          end
+        end
         sleep(5)
       end
     end

@@ -5,6 +5,15 @@ class NotesController < ApplicationController
     @notes = Note.all.sort_by(&:osc)
   end
 
+  def train
+    if $REDIS.exists('pause')
+      redirect_to root_path
+    else
+      $REDIS.set('pause', current_user.id)
+      @notes = Note.all.sort_by(&:osc)
+    end
+  end
+
   def destroy
     Note.find(params[:id]).destroy
     redirect_to notes_path

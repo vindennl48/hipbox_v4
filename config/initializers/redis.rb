@@ -1,1 +1,1 @@
-$redis = Redis::Namespace.new("project", redis: Redis.new)
+$REDIS = Redis::Namespace.new("project", redis: Redis.new)

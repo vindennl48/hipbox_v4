@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   post 'layouts/ajax_save_values'
   get 'layouts/ajax_load'
 
+  get 'notes/train'
   get 'notes/ajax_get_variables'
   post 'notes/ajax_new'
   post 'notes/ajax_update'

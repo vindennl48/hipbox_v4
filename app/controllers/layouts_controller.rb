@@ -1,5 +1,6 @@
 class LayoutsController < ApplicationController
   before_action :authenticate_user!
+  before_action :un_pause
 
   def show
     @user = User.find(current_user.id)
@@ -22,7 +23,6 @@ class LayoutsController < ApplicationController
   def destroy
     Layout.find(params[:id]).destroy
     Layout.get_current_layout(current_user)
-    puts "layout id: #{current_user.layout}"
     redirect_to root_path
   end
 
@@ -49,6 +49,12 @@ class LayoutsController < ApplicationController
     def get_layout
       layout_id = Layout.find(current_user.layout).id
       return Component.where(layout_id: layout_id)
+    end
+
+    def un_pause
+      if $REDIS.exists('pause') and $REDIS.get('pause').to_i == current_user.id
+        $REDIS.del('pause')
+      end
     end
 
 end

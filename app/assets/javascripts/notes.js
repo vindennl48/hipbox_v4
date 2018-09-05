@@ -32,6 +32,12 @@ JS.Notes = {
         })
       }
     })
+  },
+
+  Train: {
+    send_note: function(variable){
+      App.variables.change_value({variable: variable, value: 127})
+    }
   }
 
 }

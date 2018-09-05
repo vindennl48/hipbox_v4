@@ -24,6 +24,10 @@
         <%= link_to 'Edit Variables', notes_path, class: 'nav-link' %>
       </li>
       <li class="nav-item">
+        <%#<a class=" nav-link " href="javascript:void(0)">Train</a>%>
+        <%= link_to 'Train Variables', notes_train_path, class: 'nav-link' %>
+      </li>
+      <li class="nav-item">
         <%= link_to 'Save Layout', current_layout, onclick: "GUI.save_layout()", class: 'nav-link' %>
       </li>
       <li class="nav-divider">

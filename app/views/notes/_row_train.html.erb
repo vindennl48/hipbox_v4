@@ -1,7 +1,7 @@
 <div class=" row " type="note" id="<%= note.id %>">
   <div class=" col-8 pr-0 ">
     <div class=" input-group input-group-sm ">
-      <input id="variable" type="text" class="form-control" placeholder="variable" value="<%= note.variable %>"></input>
+      <input id="variable" type="text" class="form-control" placeholder="variable" value="<%= note.variable %>" disabled></input>
     </div>
   </div>
   <% if note.id != nil %>
@@ -11,13 +11,14 @@
   <% end %>
   <div class=" col pl-1 <%= pr %> ">
     <div class=" input-group input-group-sm ">
-      <input id="osc" type="text" class="form-control" placeholder="osc" value="<%= note.osc %>"></input>
+      <input id="osc" type="text" class="form-control" placeholder="osc" value="<%= note.osc %>" disabled></input>
     </div>
   </div>
   <% if note.id != nil %>
     <div class=" col-1 pl-0 pr-0 ">
       <div id="btn_action" class=" input-group input-group-sm ">
-        <%= link_to '-', note, method: :delete, data: {confirm: "Are you sure you want to delete this note?"}, class: 'btn btn-sm btn-danger' %>
+        <button class=" btn btn-sm btn-success "
+          onclick="JS.Notes.Train.send_note('<%= note.variable %>')">T</button>
       </div>
     </div>
   <% end %>
