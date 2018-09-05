@@ -37,7 +37,7 @@
         </div>
       </li>
       <li class=" nav-item ">
-        <%= link_to 'Switch User', current_layout, method: :delete,
+        <%= link_to 'Switch User', destroy_user_session_path, method: :delete,
           data: { confirm: "Are you sure you want to switch users?" }, class: " nav-link "%>
       </li>
     </ul>
