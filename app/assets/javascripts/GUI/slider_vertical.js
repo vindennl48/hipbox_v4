@@ -128,8 +128,8 @@ GUI.add_component({
           if(confirm('Are you sure you want to remove this item?'))
             a.destroy()
         }
-        $("#btn_save").unclick().click(btn_save)
-        $("#btn_destroy").unclick().click(btn_destroy)
+        $("#btn_save").click(btn_save)
+        $("#btn_destroy").click(btn_destroy)
       },
       error: function(response){
         alert('Load sliderVerticalModal failed..')
