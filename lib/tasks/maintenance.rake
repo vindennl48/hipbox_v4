@@ -2,7 +2,7 @@ namespace :maintenance do
 
   desc "TODO"
   task copy_layout: :environment do
-    layout_id = 33
+    layout_id = 1
     new_user_id = 4
 
     layout = Layout.find(layout_id)
@@ -16,6 +16,10 @@ namespace :maintenance do
     components.each do |component|
       component_new = component.dup
       component_new.layout_id = layout_new.id
+      v = component_new.variable
+      if v.match(/^mitch/).present?
+        component_new.variable.gsub!(/^mitch/, 'drums')
+      end
       component_new.save
     end
 
