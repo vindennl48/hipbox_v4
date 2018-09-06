@@ -1,4 +1,29 @@
 namespace :maintenance do
+
+  desc "TODO"
+  task copy_layout: :environment do
+    layout_id = 33
+    new_user_id = 4
+
+    layout = Layout.find(layout_id)
+    components = Component.where(layout_id: layout)
+
+    layout_new = layout.dup
+    layout_new.user_id = new_user_id
+    layout_new.name = 'default'
+    layout_new.save
+
+    components.each do |component|
+      component_new = component.dup
+      component_new.layout_id = layout_new.id
+      component_new.save
+    end
+
+    puts "done!"
+
+  end
+
+
   desc "TODO"
   task default_notes: :environment do
     members = ['james', 'mitch', 'jesse', 'drums']
