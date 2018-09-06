@@ -13,7 +13,7 @@ class UpdateVariablesJob < ApplicationJob
           ActionCable.server.broadcast "variables_channel",
             {user_id: 0, note: notes}
           notes.each do |note|
-            $OSCRUBY.send OSC::Message.new(note.osc, 127)
+            $OSCRUBY.send OSC::Message.new(note.osc, note.value.to_i)
           end
         end
         sleep(5)
