@@ -4,11 +4,8 @@ from pythonosc import osc_server
 mido.set_backend('mido.backends.pygame')
 
 class OSC_SERVER:
-    def __init__(self, midi_out=None):
+    def __init__(self, midi_out='Bome MIDI Translator'):
         from pythonosc import dispatcher
-
-        if midi_out == None:
-            midi_out = mido.open_output('Bome MIDI Translator')
 
         dispatcher = dispatcher.Dispatcher()
         dispatcher.map("/*/*/*", self._callback)
@@ -24,10 +21,12 @@ class OSC_SERVER:
         ch = int(ch)
         if t == "cc": ch += 0xB0
         else:         ch += 0x90
-        self.output.send(
-            mido.Message.from_bytes([
-                int(ch),
-                int(n),
-                int(value)
-            ])
-        )
+        print(f"/{ch}/{n}/{value}")
+        with mido.open_output(self.output) as output:
+            output.send(
+                mido.Message.from_bytes([
+                    int(ch),
+                    int(n),
+                    int(value)
+                ])
+            )

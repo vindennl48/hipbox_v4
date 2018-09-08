@@ -71,15 +71,15 @@ class FCB1010_SERVER:
     def _process_note(self, note):
         if note.channel != self.channel: return 0
 
-        if note.type == 'note_on':
-            if note.velocity > 0:
-                variable = self.fcb_map[f"{note.note}"]
-                print(f"fcb1010_server::note: {note}")
-                print(f"fcb1010_server::variable: {variable}\n")
-                self.output.send_message(f"/variable/{variable}", note.velocity)
-        elif note.type == 'control_change':
+        if note.type == 'control_change':
             variable = self.fcb_map[f"{note.control}"]
             print(f"fcb1010_server::note: {note}")
             print(f"fcb1010_server::variable: {variable}\n")
             self.output.send_message(f"/variable/{variable}", note.value)
+        elif note.type == 'note_on':
+            if note.velocity > 0:
+                variable = self.fcb_map[f"{note.note}"]
+                print(f"fcb1010_server::note: {note}")
+                print(f"fcb1010_server::variable: {variable}\n")
+                self.output.send_message(f"/variable/{variable}", 127)
 

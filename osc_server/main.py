@@ -7,8 +7,8 @@ from osc_server     import OSC_SERVER
 mido.set_backend('mido.backends.pygame')
 
 if __name__ == "__main__":
-    bome_out = mido.open_output('Bome MIDI Translator')
-    osc_out  = udp_client.SimpleUDPClient('192.168.99.1', 4004)
+    bome_out = 'Bome MIDI Translator'
+    osc_out  = udp_client.SimpleUDPClient('localhost', 4005)
 
     fcb  = FCB1010_SERVER(osc_out=osc_out).run()
     midi = MIDI_SERVER(osc_out=osc_out).run()
