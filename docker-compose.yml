@@ -10,6 +10,7 @@ services:
     command: puma
     ports:
       - 3000:3000
+      - 4005:4005/udp
     depends_on:
       - db
       - redis
