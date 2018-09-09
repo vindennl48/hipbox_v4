@@ -9,14 +9,12 @@ class VariablesChannel < ApplicationCable::Channel
 
   def change_value(msg)
     data = msg['data']
-    note = Note.where(variable: data['variable'])
-    if not note.empty?
-      note = note.first
-      note = Note.update(note.id, value: data['value'])
-      ActionCable.server.broadcast "variables_channel",
-        {user_id: current_user.id, note: note}
-      $OSCRUBY.send OSC::Message.new(note.osc, data['value'])
-      #puts "Note: #{note.osc}, #{data['value']}"
-    end
+    Note.broadcast_note(
+      Note.process_note(
+        data['value'],
+        variable:data['variable'],
+        user_id:current_user.id
+      ), user_id:current_user.id
+    )
   end
 end

@@ -8,21 +8,10 @@ Thread.new do
     server.add_pattern %r{variable/.*} do |*args|
       vars = args[0][1..-1].split('/')
       variable = vars[1]
+      ntype = vars[2]
       value = args[1]
-
-      if Note.exists? variable: variable
-        note = Note.where(variable: variable).first
-        if note.value.to_i > 0
-          note.value = 0
-        else
-          note.value = 127
-        end
-        note.save
-        ActionCable.server.broadcast "variables_channel",
-          {user_id: 0, note: [note]}
-        $OSCRUBY.send OSC::Message.new(note.osc, note.value.to_i)
-      end
-
+      Note.broadcast_note(
+        Note.process_note(value, variable:variable, ntype:ntype))
     end
 
     # from ableton
@@ -32,18 +21,10 @@ Thread.new do
       ntype = vars[2]
       value = args[1].to_i
       osc = args[0][5..-1]
-
-      if chan == 15 and Note.exists? osc: osc
-        note = Note.where(osc: osc).first
-        if ntype == 'cc'
-          #puts "osc: #{osc}, note: #{note}, value: #{value}"
-          note.value = value
-          note.save
-          ActionCable.server.broadcast "variables_channel",
-            {user_id: 0, note: [note]}
-        end
+      if chan==15
+        Note.broadcast_note(
+          Note.process_note(value, osc:osc, ntype:ntype))
       end
-
     end
 
   end
