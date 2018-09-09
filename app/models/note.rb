@@ -2,10 +2,14 @@ class Note < ApplicationRecord
   validates :variable, uniqueness: true
   validates :osc, uniqueness: true
 
+  def self.get_ntype(note)
+    return note.osc[1..-1].split('/')[1]
+  end
+
   def self.process_note(value, variable:nil, osc:nil, user_id:0, ntype:nil)
     note = Note.find_note(variable:variable, osc:osc)
     if ntype == nil
-      ntype = note.osc[1..-1].split('/')[1]
+      ntype = Note.get_ntype(note)
     end
 
     if note.variable == 'global_rec_toggle'

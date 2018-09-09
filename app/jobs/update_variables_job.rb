@@ -13,13 +13,7 @@ class UpdateVariablesJob < ApplicationJob
           ActionCable.server.broadcast "variables_channel",
             {user_id: 0, note: notes}
           notes.each do |note|
-            if not [
-              'global_advance_playhead',
-              'global_play',
-              'global_record',
-              'global_stop_timeline',
-              'global_stop_clips',
-            ].include? note.variable
+            if Note.get_ntype(note) != 'n'
               $OSCRUBY.send OSC::Message.new(note.osc, note.value.to_i)
             end
           end
