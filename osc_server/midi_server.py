@@ -19,6 +19,7 @@ class MIDI_SERVER:
 
     def _listen(self):
         for note in mido.open_input(self.input):
+            print("Here")
             self._process_note(note)
         print("midi server exited!")
 

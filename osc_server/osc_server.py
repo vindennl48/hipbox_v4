@@ -19,8 +19,11 @@ class OSC_SERVER:
     def _callback(self, path, value):
         ch, t, n = tuple(path[1:].split('/'))
         ch = int(ch)
-        if t == "cc": ch += 0xB0
-        else:         ch += 0x90
+        if t == "cc":
+            ch += 0xB0
+        else:
+            ch += 0x90
+            value = 127
         print(f"/{ch}/{n}/{value}")
         with mido.open_output(self.output) as output:
             output.send(
