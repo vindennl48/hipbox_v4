@@ -250,8 +250,10 @@ GUI.add_component({
     let filler_y = fillerbb.y
     let filler_new_pos = handle_new_pos + (handlebb.height / 2)
 
-    this.handle.translate(0, handle_new_pos - handlebb.y)
-    this.filler.translate(0, filler_new_pos - fillerbb.y)
+    //this.handle.translate(0, handle_new_pos - handlebb.y)
+    //this.filler.translate(0, filler_new_pos - fillerbb.y)
+    this.handle.transform("t" + 0 + "," + handle_new_pos)
+    this.filler.transform("t" + 0 + "," + filler_new_pos)
     fillerbb = this.filler.getBBox()
     this.filler.attr('height', this.y() + this.height() - fillerbb.y)
     // --

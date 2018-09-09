@@ -37,9 +37,9 @@ class FCB1010_SERVER:
             "126": 'mitch_fx_vol',
             "127": 'mitch_fx_super_verb',
 
-            "06": 'blind_play_song',
-            "07": 'blind_play_intro',
-            "08": 'blind_play_click',
+            "6": 'blind_play_song',
+            "7": 'blind_play_intro',
+            "8": 'blind_play_click',
 
             "16": 'chrono_play_song',
             "17": 'chrono_play_intro',
