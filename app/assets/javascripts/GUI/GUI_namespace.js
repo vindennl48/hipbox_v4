@@ -153,8 +153,10 @@ let GUI = {
   // --
 
   // Red dot to signify levels are off of the saved values
-  dirty_levels: function(){
-    $("#dirty_levels").removeAttr('hidden')
+  dirty_levels: function(component){
+    if(component.saved_value != component.value && !/^gain_/.test(component.variable)){
+      $("#dirty_levels").removeAttr('hidden')
+    }
   },
 
 }

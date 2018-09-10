@@ -192,10 +192,8 @@ GUI.add_component({
     this.filler.attr('height', (this.height()-(handle_h/2))*percent)
     // --
 
-    if(this.saved_value != volume)
-      GUI.dirty_levels()
-
     this.value = volume
+    GUI.dirty_levels(this)
 
     // sends new data to server if applicable.
     //  this option exists to prevent feed-back loops
