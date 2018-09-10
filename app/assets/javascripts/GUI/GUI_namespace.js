@@ -17,14 +17,14 @@ let GUI = {
   },
 
   move_by: function(a, x=0, y=0){
-    a.translate(x, y)
+    x += a.getBBox().x
+    y += a.getBBox().y
+    a.transform("t"+x+","+y)
     return a
   },
 
   move_to: function(a, x, y){
-    let x2 = x - a.getBBox().x
-    let y2 = y - a.getBBox().y
-    GUI.move_by(a, x2, y2)
+    a.transform("t"+x+","+y)
     return a
   },
 

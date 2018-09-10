@@ -16,10 +16,7 @@ GUI.add_component({
     // --
 
     // RaphaelJS Items
-    // temporary defaults
-    let x = 50, y = 50
-
-    this.body = paper.text(x, y, this.value)
+    this.body = paper.text(0, 0, this.value)
       .attr({fill:this.color, 'font-size':this.extra['size']})
     // --
 
@@ -61,11 +58,11 @@ GUI.add_component({
   // Size & Position
   // REQUIRED
   x: function(x){ 
-    if(x == undefined){ return this.body.getBBox().x }
+    if(x == undefined){ return this.body.getBBox().x + this.body.getBBox().width/2 }
     else{ GUI.move_to(this.set, x, this.y()); return this }
   },
   y: function(y){ 
-    if(y == undefined){ return this.body.getBBox().y }
+    if(y == undefined){ return this.body.getBBox().y + this.body.getBBox().height/2 }
     else{ GUI.move_to(this.set, this.x(), y); return this }
   },
   width: function(width){
@@ -194,7 +191,7 @@ GUI.add_component({
           a.activate_prop_modal()
           let selector = GUI.add_to_charm_list(
             'selector',
-            a.paper.rect(a.x(), a.y() + a.height(), a.width(), 10, 0)
+            a.paper.rect(a.x()-a.width()/2, a.y() + a.height()/2, a.width(), 10, 0)
               .attr({fill:'#000', 'stroke-width':3, stroke:'#fff'})
           )
         }

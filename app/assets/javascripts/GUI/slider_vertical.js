@@ -17,16 +17,13 @@ GUI.add_component({
     // --
 
     // RaphaelJS Items
-    // temporary defaults
-    let x = 0, y = 0, width = 60, height = 300
-
-    this.body = paper.rect(x, y, width, height, 3)
+    this.body = paper.rect(0, 0, 60, 300, 3)
       .attr({fill:'black', 'stroke-width':3, stroke:this.color})
 
-    this.filler = paper.rect(x, y+5, width, height-5, 3)
+    this.filler = paper.rect(0, 5, 60, 295, 3)
       .attr({fill:'#424242', 'stroke-width':3, stroke:this.color})
 
-    this.handle = paper.rect(x, y, width, 10, 3)
+    this.handle = paper.rect(0, 0, 60, 10, 3)
       .attr({fill:this.color, 'stroke-width':0, stroke:this.color})
     // --
 
@@ -52,8 +49,8 @@ GUI.add_component({
     return {
       "id":        undefined,
       "ctype":     this.ctype,
-      "x":         15,
-      "y":         15,
+      "x":         0,
+      "y":         0,
       "width":     60,
       "height":    300,
       "color":     'orange',
@@ -184,30 +181,31 @@ GUI.add_component({
     else if(volume < 0){ volume = 0 }
 
     // converts volume to inverse percent of 0-127
-    let v_percent = 1 - (volume / 127.0)
+    let percent = volume / 127.0
 
     // -- calculates new position and size of handle and filler --
-    let handlebb = this.handle.getBBox()
-    let handle_new_pos = ((this.height() - handlebb.height) * v_percent) + this.y()
-
-    let fillerbb = this.filler.getBBox()
-    let filler_y = fillerbb.y
-    let filler_new_pos = handle_new_pos + (handlebb.height / 2)
-
-    this.handle.translate(0, handle_new_pos - handlebb.y)
-    this.filler.translate(0, filler_new_pos - fillerbb.y)
-    fillerbb = this.filler.getBBox()
-    this.filler.attr('height', this.y() + this.height() - fillerbb.y)
+    let handle_h = this.handle.getBBox().height
+    let handle_new_pos = (this.height() - handle_h) * (1-percent)
+    let filler_new_pos = (this.height() - (handle_h/2)) * (1-percent)
+    this.handle.attr('y', handle_new_pos)
+    this.filler.attr('y', filler_new_pos + (handle_h/2))
+    this.filler.attr('height', (this.height()-(handle_h/2))*percent)
     // --
 
     if(this.saved_value != volume)
       GUI.dirty_levels()
 
     this.value = volume
+
     // sends new data to server if applicable.
     //  this option exists to prevent feed-back loops
     if(update == "yes")
       GUI.change_value({variable: this.variable, value: volume})
+
+    percent        = null
+    handle_h       = null
+    handle_new_pos = null
+    filler_new_pos = null
 
     return this
   },
@@ -246,22 +244,22 @@ GUI.add_component({
 
           let width_ball = GUI.add_to_charm_list(
             'width_ball',
-            a.paper.circle(15, 15, 20)
+            a.paper.circle(0, 0, 20)
               .attr({fill:'#000', 'stroke-width':3, stroke:'#fff'})
           ).drag(
             function(dx, dy){
               let ball = GUI.charms.width_ball
               let ballbb = ball.getBBox()
-              if (!ball.spos){ball.spos = ballbb.x}
-              GUI.move_to(ball, GUI.snap(dx+ball.spos), ballbb.y)
-              a.width(GUI.snap(dx+ball.spos) + (ballbb.width/2) - a.x())
+              if (!ball.spos){ball.spos = ballbb.x + ballbb.width/2}
+              GUI.move_to(ball, GUI.snap(dx+ball.spos), a.y()+a.height()/2)
+              a.width(GUI.snap(dx+ball.spos) - a.x())
 
               ball = GUI.charms.height_ball
               ballbb = ball.getBBox()
               GUI.move_to(
                 ball,
-                a.x() + (a.width()/2) - (ballbb.width/2),
-                ballbb.y
+                a.x() + a.width()/2,
+                a.y() + a.height()
               )
             },
             function(){},
@@ -270,22 +268,22 @@ GUI.add_component({
 
           let height_ball = GUI.add_to_charm_list(
             'height_ball',
-            a.paper.circle(15, 15, 20)
+            a.paper.circle(0, 0, 20)
               .attr({fill:'#000', 'stroke-width':3, stroke:'#fff'})
           ).drag(
             function(dx, dy){
               let ball = GUI.charms.height_ball
               let ballbb = ball.getBBox()
-              if (!ball.spos){ball.spos = ballbb.y}
-              GUI.move_to(ball, ballbb.x, GUI.snap(dy+ball.spos))
-              a.height(GUI.snap(dy+ball.spos) + (ballbb.height/2) - a.y())
+              if (!ball.spos){ball.spos = ballbb.y + ballbb.width/2}
+              GUI.move_to(ball, a.x()+a.width()/2, GUI.snap(dy+ball.spos))
+              a.height(GUI.snap(dy+ball.spos) - a.y())
 
               ball = GUI.charms.width_ball
               ballbb = ball.getBBox()
               GUI.move_to(
                 ball,
-                ballbb.x,
-                a.y() + (a.height()/2) - (ballbb.height/2)
+                a.x() + a.width(),
+                a.y() + a.height()/2
               )
             },
             function(){},
@@ -294,13 +292,13 @@ GUI.add_component({
 
           GUI.move_to(
             width_ball, 
-            a.x() + a.width() - 20,
-            a.y() + a.height()/2 - 20
+            a.x() + a.width(),
+            a.y() + a.height()/2
           )
           GUI.move_to(
             height_ball, 
-            a.x() + a.width()/2 - 20,
-            a.y() + a.height() - 20
+            a.x() + a.width()/2,
+            a.y() + a.height()
           )
 
           a.activate_prop_modal()

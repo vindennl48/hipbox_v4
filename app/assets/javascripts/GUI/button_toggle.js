@@ -16,13 +16,10 @@ GUI.add_component({
     // --
 
     // RaphaelJS Items
-    // temporary defaults
-    let x = 0, y = 0, width = 60, height = 60
-
-    this.body = paper.rect(x, y, width, height, 3)
+    this.body = paper.rect(0, 0, 60, 60, 3)
       .attr({fill:'black', 'stroke-width':3, stroke:this.color})
 
-    this.btn = paper.rect(x+10, y+10, width-20, height-20, 3)
+    this.btn = paper.rect(10, 10, 40, 40, 3)
       .attr({fill:this.color, 'stroke-width':0}).hide()
     // --
 
@@ -47,8 +44,8 @@ GUI.add_component({
     return {
       "id":        undefined,
       "ctype":     this.ctype,
-      "x":         15,
-      "y":         15,
+      "x":         0,
+      "y":         0,
       "width":     60,
       "height":    60,
       "color":     'orange',
@@ -76,11 +73,6 @@ GUI.add_component({
     else{ 
       this.body.attr('width', width)
       this.btn.attr('width', width-20)
-      GUI.move_to(
-        this.btn,
-        this.x()+10,
-        this.btn.getBBox().y
-      )
       return this 
     }
   },
@@ -91,11 +83,6 @@ GUI.add_component({
     else{ 
       this.body.attr('height', height)
       this.btn.attr('height', height-20)
-      GUI.move_to(
-        this.btn,
-        this.btn.getBBox().x,
-        this.y()+10
-      )
       return this
     }
   },
@@ -236,22 +223,22 @@ GUI.add_component({
 
           let width_ball = GUI.add_to_charm_list(
             'width_ball',
-            a.paper.circle(15, 15, 15)
+            a.paper.circle(0, 0, 15)
               .attr({fill:'#000', 'stroke-width':3, stroke:'#fff'})
           ).drag(
             function(dx, dy){
               let ball = GUI.charms.width_ball
               let ballbb = ball.getBBox()
-              if (!ball.spos){ball.spos = ballbb.x}
-              GUI.move_to(ball, GUI.snap(dx+ball.spos), ballbb.y)
-              a.width(GUI.snap(dx+ball.spos) + (ballbb.width/2) - a.x())
+              if (!ball.spos){ball.spos = ballbb.x + ballbb.width/2}
+              GUI.move_to(ball, GUI.snap(dx+ball.spos), a.y()+a.height()/2)
+              a.width(GUI.snap(dx+ball.spos) - a.x())
 
               ball = GUI.charms.height_ball
               ballbb = ball.getBBox()
               GUI.move_to(
                 ball,
-                a.x() + (a.width()/2) - (ballbb.width/2),
-                ballbb.y
+                a.x() + a.width()/2,
+                a.y() + a.height()
               )
             },
             function(){},
@@ -260,22 +247,22 @@ GUI.add_component({
 
           let height_ball = GUI.add_to_charm_list(
             'height_ball',
-            a.paper.circle(15, 15, 15)
+            a.paper.circle(0, 0, 15)
               .attr({fill:'#000', 'stroke-width':3, stroke:'#fff'})
           ).drag(
             function(dx, dy){
               let ball = GUI.charms.height_ball
               let ballbb = ball.getBBox()
-              if (!ball.spos){ball.spos = ballbb.y}
-              GUI.move_to(ball, ballbb.x, GUI.snap(dy+ball.spos))
-              a.height(GUI.snap(dy+ball.spos) + (ballbb.height/2) - a.y())
+              if (!ball.spos){ball.spos = ballbb.y + ballbb.width/2}
+              GUI.move_to(ball, a.x()+a.width()/2, GUI.snap(dy+ball.spos))
+              a.height(GUI.snap(dy+ball.spos) - a.y())
 
               ball = GUI.charms.width_ball
               ballbb = ball.getBBox()
               GUI.move_to(
                 ball,
-                ballbb.x,
-                a.y() + (a.height()/2) - (ballbb.height/2)
+                a.x() + a.width(),
+                a.y() + a.height()/2
               )
             },
             function(){},
@@ -284,13 +271,13 @@ GUI.add_component({
 
           GUI.move_to(
             width_ball, 
-            a.x() + a.width() - 20,
-            a.y() + a.height()/2 - 20
+            a.x() + a.width(),
+            a.y() + a.height()/2
           )
           GUI.move_to(
             height_ball, 
-            a.x() + a.width()/2 - 20,
-            a.y() + a.height() - 20
+            a.x() + a.width()/2,
+            a.y() + a.height()
           )
 
           a.activate_prop_modal()
