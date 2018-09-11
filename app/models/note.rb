@@ -38,6 +38,10 @@ class Note < ApplicationRecord
       sleep(0.05)
       Note.find_update_and_submit_note(0, variable:'global_advance_playhead')
 
+    elsif note.variable.include? 'play'
+      Note.find_update_note(127, variable:'global_play')
+      Note.submit_note(note)
+
     elsif ntype == 'cc'
       note = Note.update(note.id, value: value.to_i)
       Note.submit_note(note)
