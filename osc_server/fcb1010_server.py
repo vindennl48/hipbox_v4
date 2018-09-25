@@ -6,9 +6,14 @@ mido.set_backend('mido.backends.pygame')
 class FCB1010_SERVER:
     def __init__(self,
         channel=0,
-        midi_in='3- Scarlett 18i20 USB',
+        midi_in='Scarlett 18i20 USB',
         osc_out=None
     ):
+        inputs = mido.get_input_names()
+        for input in inputs:
+            if "Scarlett" in input:
+                midi_in = input
+                break
         if osc_out == None:
             osc_out = udp_client.SimpleUDPClient('192.168.99.1', 4004)
         self.input = midi_in
